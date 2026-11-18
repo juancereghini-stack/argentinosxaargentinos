@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Argentinos para argentinos</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&amp;family=Source+Sans+3:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --red:#D8141F; --red-deep:#A30D16; --red-ink:#FFF6F2;
+  --navy:#14213D;
+  --bg:#FAF6F0; --surface:#FFFFFF; --ink:#141414; --muted:#5C5650; --line:#E4DCD1;
+  --ok:#1E7A46; --warn:#9A6200; --bad:#B3261E;
+  --ok-bg:#E4F3EA; --warn-bg:#FBEFD5; --bad-bg:#FBE4E2;
+  --shadow:0 18px 40px -18px rgba(20,20,20,.35);
+  --display:'Space Grotesk',system-ui,sans-serif; --body:'Source Sans 3',system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#15110F; --surface:#201A17; --ink:#F6EFE8; --muted:#B9AEA4; --line:#3A312C;
+    --ok:#6FD39A; --warn:#F0B45A; --bad:#FF8F86;
+    --ok-bg:#16301F; --warn-bg:#33270F; --bad-bg:#3A1816; --shadow:0 18px 40px -18px #000;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#15110F; --surface:#201A17; --ink:#F6EFE8; --muted:#B9AEA4; --line:#3A312C;
+  --ok:#6FD39A; --warn:#F0B45A; --bad:#FF8F86;
+  --ok-bg:#16301F; --warn-bg:#33270F; --bad-bg:#3A1816; --shadow:0 18px 40px -18px #000;
+}
+*{box-sizing:border-box}
+html{overflow-x:clip;scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:18px;line-height:1.6}
+img{max-width:100%;height:auto;display:block}
+a{color:inherit}
+h1,h2,h3,h4{font-family:var(--display);line-height:1.08;margin:0;letter-spacing:-.02em}
+h2{font-size:clamp(2rem,5vw,3.6rem)}
+h3{font-size:clamp(1.2rem,2.2vw,1.6rem)}
+p{margin:0}
+.wrap{width:min(1120px,100% - 32px);margin-inline:auto}
+.stack{display:flex;flex-direction:column;gap:18px}
+.eyebrow{font-family:var(--display);text-transform:uppercase;letter-spacing:.16em;font-size:.78rem;font-weight:700;color:var(--red)}
+.lead{font-size:1.2rem;color:var(--muted);max-width:62ch}
+section{position:relative;padding:clamp(64px,10vw,130px) 0}
+.on-red{background:var(--red);color:var(--red-ink)}
+.on-red .eyebrow,.on-red .lead{color:var(--red-ink)}
+.on-red .lead{opacity:.92}
+.pat-rings{background-image:repeating-radial-gradient(circle at 0% 100%,transparent 0 26px,rgba(255,255,255,.10) 26px 28px),repeating-radial-gradient(circle at 100% 0%,transparent 0 26px,rgba(0,0,0,.10) 26px 28px)}
+.pat-stripes{background-image:repeating-linear-gradient(135deg,transparent 0 34px,rgba(255,255,255,.08) 34px 68px)}
+.pat-dots{background-image:radial-gradient(rgba(20,20,20,.12) 1.4px,transparent 1.6px);background-size:22px 22px}
+.tag{display:inline-block;font:700 .68rem var(--display);text-transform:uppercase;letter-spacing:.08em;padding:3px 8px;border-radius:99px;vertical-align:middle}
+.tag.val{background:var(--warn-bg);color:var(--warn)}
+.tag.src{background:var(--ok-bg);color:var(--ok)}
+.tag.nuestra{background:var(--surface);color:var(--muted);border:1px solid var(--line)}
+sup a{font-size:.72em;text-decoration:none;color:var(--red);font-weight:700}
+.on-red sup a{color:#fff}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;gap:20px;height:60px}
+.brand{display:flex;align-items:center;gap:10px;font:700 .95rem var(--display);text-decoration:none}
+.brand img{width:34px;height:34px}
+.nav ul{display:flex;gap:18px;list-style:none;margin:0 0 0 auto;padding:0;overflow-x:auto;scrollbar-width:none}
+.nav li a{font:500 .88rem var(--display);text-decoration:none;white-space:nowrap;opacity:.8}
+.nav li a:hover{opacity:1;color:var(--red)}
+.progress{position:absolute;left:0;bottom:-1px;height:3px;background:var(--red);width:calc(var(--p,0)*100%)}
+.side{display:none}
+
+/* hero */
+.hero{min-height:100svh;padding:0;background:var(--red);color:var(--red-ink);overflow:hidden;display:flex;align-items:center}
+.hero .ring{position:absolute;inset:-20% 0;pointer-events:none}
+.hero .grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center;padding:60px 0}
+.hero h1{font-size:clamp(2.6rem,8vw,6.4rem);font-weight:700;text-transform:uppercase}
+.hero h1 em{font-style:normal;display:block;color:#fff;-webkit-text-stroke:0}
+.hero .claim{font:500 clamp(1.1rem,2.4vw,1.6rem) var(--display);margin-top:22px;max-width:28ch}
+.hero .firma{margin-top:14px;opacity:.9;font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:10px;margin-top:28px;background:#fff;color:var(--red-deep);font:700 1rem var(--display);padding:14px 22px;border-radius:99px;text-decoration:none;border:0;cursor:pointer;transition:transform .2s}
+.btn:hover{transform:translateY(-2px)}
+.btn.line{background:transparent;color:inherit;border:2px solid currentColor}
+.hero-photo{position:relative;justify-self:center;width:min(430px,100%)}
+.hero-photo .frame{transform:rotate(3deg);border-radius:18px;overflow:hidden;box-shadow:0 40px 80px -30px rgba(0,0,0,.6);border:6px solid #fff;background:#fff;transition:transform .15s}
+.hero-photo img{width:100%;aspect-ratio:4/5;object-fit:cover}
+.hero-photo figcaption,.cap{font-size:.74rem;opacity:.85;margin-top:8px}
+.float{position:absolute;border-radius:50%;display:grid;place-items:center;font:700 .8rem var(--display);text-align:center;color:var(--red-deep);background:#fff;box-shadow:var(--shadow);border:3px double var(--red)}
+.float.a{width:104px;height:104px;left:-34px;bottom:12%}
+.float.b{width:78px;height:78px;right:-16px;top:6%;border-color:var(--navy);color:var(--navy)}
+.scrollhint{position:absolute;bottom:18px;left:50%;translate:-50% 0;font:700 .75rem var(--display);letter-spacing:.16em;text-transform:uppercase;opacity:.85;animation:bob 1.8s ease-in-out infinite}
+@keyframes bob{50%{translate:-50% 8px}}
+
+/* marquee */
+.marquee{background:var(--navy);color:#fff;overflow:hidden;padding:18px 0;white-space:nowrap;font:700 clamp(1.1rem,3vw,1.8rem) var(--display);text-transform:uppercase}
+.marquee div{display:inline-block;animation:slide 32s linear infinite}
+.marquee span{margin-inline:28px}
+.marquee span::after{content:"★";margin-left:56px;color:var(--red)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* passport */
+#pasaporte{background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--red) 12%,var(--bg)),var(--bg) 65%)}
+.pp-wrap{display:grid;grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr);gap:40px;align-items:center}
+.pp-stage{--w:min(250px,calc((100vw - 170px)/2));--s:0;flex:1;min-width:0;height:calc(var(--w)*1.45 + 40px);display:grid;place-items:center;perspective:1800px;position:relative}
+.pp-stage[data-s="1"],.pp-stage[data-s="2"],.pp-stage[data-s="3"]{--s:.5}
+.pp-stage[data-s="4"]{--s:1}
+.pp-book{position:relative;width:var(--w);height:calc(var(--w)*1.42);transform:translateX(calc(var(--w)*var(--s)));transition:transform .9s cubic-bezier(.5,.1,.2,1);transform-style:preserve-3d;font-size:calc(var(--w)/17)}
+.leaf{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;transition:transform 1s cubic-bezier(.5,.1,.2,1)}
+
+.face{box-shadow:0 14px 28px -10px rgba(0,0,0,.35);position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:2px 10px 10px 2px;overflow:hidden;padding:1.3em 1.2em;display:flex;flex-direction:column;gap:.7em;color:#2a2420;line-height:1.35}
+.face.back{transform:rotateY(180deg);border-radius:10px 2px 2px 10px}
+.paper{background:#FBF4E6 repeating-linear-gradient(0deg,rgba(150,120,80,.05) 0 2px,transparent 2px 6px)}
+.paper::before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-radial-gradient(circle at 50% 120%,transparent 0 .9em,rgba(216,20,31,.07) .9em 1em)}
+@keyframes pulse{50%{transform:scale(1.07)}}
+.face h5{font:700 1.15em var(--display);margin:0;text-transform:uppercase;letter-spacing:.06em;color:var(--red-deep)}
+.face p{font-size:.9em;margin:0}
+.face .f{border-bottom:1px solid #b9ab94;padding:.2em 0;font-size:.82em;color:#6b5f52}
+.face .code{font:700 1.2em var(--display);letter-spacing:.14em;color:var(--navy);background:rgba(20,33,61,.07);padding:.4em .5em;border-radius:6px;text-align:center}
+.face .photo{width:42%;aspect-ratio:3/4;border:1px dashed #9c8f7c;border-radius:4px;display:grid;place-items:center;font-size:.7em;color:#8a7e6e;text-align:center}
+.slots{display:grid;grid-template-columns:1fr 1fr;gap:.6em;align-content:start}
+.slot{position:relative;border:1.5px dashed #a89a85;border-radius:8px;background:transparent;cursor:pointer;font:600 .68em var(--body);color:#8a7e6e;padding:.3em;display:grid;place-items:center;text-align:center;aspect-ratio:1}
+.slot:hover{background:rgba(216,20,31,.06);border-color:var(--red)}
+.slot .stamp{display:none;position:absolute;inset:6%;border:.22em double currentColor;border-radius:50%;place-items:center;text-align:center;font:700 .86em/1.05 var(--display);text-transform:uppercase;letter-spacing:.05em;transform:rotate(var(--rot,-12deg));color:var(--red);opacity:.92}
+.slot.est .stamp{color:var(--navy)}
+.slot.done{border-style:solid;border-color:transparent;color:transparent}
+.slot.done .stamp{display:grid;animation:stampIn .5s cubic-bezier(.2,1.6,.4,1)}
+.slot .stamp small{display:block;font-size:.62em;letter-spacing:.1em;opacity:.85}
+@keyframes stampIn{0%{transform:scale(2.4) rotate(calc(var(--rot,-12deg) - 20deg));opacity:0}100%{transform:scale(1) rotate(var(--rot,-12deg));opacity:.92}}
+.leaf .face.paper.right{box-shadow:inset 8px 0 14px -10px rgba(0,0,0,.35)}
+.face.paper.back{box-shadow:inset -8px 0 14px -10px rgba(0,0,0,.35)}
+.pp-count{font:600 .95rem var(--display);color:var(--muted)}
+.pp-note{font-size:.95rem;color:var(--muted)}
+
+
+.leather{background:radial-gradient(circle at 30% 20%,#b8222a,#8c141b 70%)}
+.leather::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(0,0,0,.18) .6px,transparent .8px);background-size:4px 4px;opacity:.5;pointer-events:none;mix-blend-mode:multiply}
+.face.cover{align-items:center;text-align:center;justify-content:flex-start;gap:.35em;padding:1.6em 1em;cursor:pointer;border-radius:3px 10px 10px 3px;color:#E9CF8F;box-shadow:inset .5em 0 .8em -.4em rgba(0,0,0,.45),0 14px 28px -10px rgba(0,0,0,.35)}
+.face.cover.back{border-radius:10px 3px 3px 10px}
+.arcs{position:absolute;left:50%;top:41%;width:150%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:repeating-radial-gradient(circle,transparent 0 .55em,rgba(233,207,143,.5) .55em .62em);-webkit-mask:radial-gradient(circle,#000 28%,transparent 62%);mask:radial-gradient(circle,#000 28%,transparent 62%);pointer-events:none}
+.ent{position:relative;z-index:1;font:600 .62em var(--display);letter-spacing:.2em;text-transform:uppercase;line-height:1.5}
+.crest{position:relative;z-index:1;width:44%;margin:.7em 0 .5em;filter:drop-shadow(0 .2em .3em rgba(0,0,0,.4))}
+.endcover .crest{position:absolute;left:50%;top:50%;translate:-50% -50%;width:44%}
+.endcover{position:absolute;inset:0;border-radius:3px 10px 10px 3px;overflow:hidden;box-shadow:0 14px 28px -10px rgba(0,0,0,.35)}
+.cover .t{position:relative;z-index:1;font:700 1.75em var(--display);letter-spacing:.1em;text-transform:uppercase;color:#FBE9B5}
+.cover .s{position:relative;z-index:1;font:600 .62em var(--display);letter-spacing:.3em;text-transform:uppercase}
+.cover .u{position:relative;z-index:1;margin-top:auto;font:700 .8em/1.15 var(--display);text-transform:uppercase;letter-spacing:.06em;color:#fff}
+.cover .hint{position:absolute;z-index:2;top:.9em;right:.9em;font-size:.62em;background:#fff;color:var(--red-deep);padding:.25em .8em;border-radius:99px;font-weight:700;animation:pulse 1.6s infinite}
+.pp-row{display:flex;align-items:center;justify-content:center;gap:12px}
+.pp-arrow{flex:none;width:46px;height:46px;border-radius:50%;border:2px solid var(--red);background:var(--red);color:#fff;font:700 1.9rem/1 var(--display);cursor:pointer;display:grid;place-items:center;padding:0 0 4px;transition:scale .2s,box-shadow .2s}
+.pp-arrow:hover:not(:disabled){scale:1.12;box-shadow:0 0 0 6px rgba(216,20,31,.2),0 10px 24px -6px rgba(216,20,31,.6)}
+.pp-arrow:disabled{opacity:.3;cursor:default}
+.fld{font:600 .82em var(--body);color:#2a2420;background:transparent;border:0;border-bottom:1px solid #b9ab94;padding:.35em .1em;width:100%;border-radius:0;outline:none}
+.fld::placeholder{color:#8a7e6e;font-weight:400}
+.fld:focus{border-bottom-color:var(--red);background:rgba(216,20,31,.05)}
+.fld.ro{color:#6b5f52;border-bottom:1px solid #b9ab94}
+.face .photo{cursor:pointer;position:relative;overflow:hidden}
+.face .photo input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.face .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.slot .stamp small.b{font-size:.5em;opacity:.7;margin-top:.2em}
+.endp{align-items:stretch;justify-content:center}
+/* hover: scale + glow */
+.card,.spec>div,.jbody,.stage-c,.measure,.btn,.imgbox{transition:scale .28s cubic-bezier(.3,1.4,.5,1),box-shadow .28s,border-color .28s}
+.card:hover,.spec>div:hover,.jbody:hover,.stage-c:hover,.imgbox:hover{scale:1.03;box-shadow:0 0 0 2px rgba(216,20,31,.35),0 22px 48px -14px rgba(216,20,31,.5);position:relative;z-index:3}
+.on-red .card:hover,.on-red .jbody:hover{box-shadow:0 0 0 2px rgba(255,255,255,.55),0 0 40px 2px rgba(255,255,255,.35)}
+.btn:hover{scale:1.07;box-shadow:0 0 0 6px rgba(255,255,255,.25),0 12px 30px -6px rgba(0,0,0,.45)}
+.hero canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.hero .wrap,.hero .scrollhint{position:relative;z-index:2}
+.hero .scrollhint{position:absolute}
+/* journey: ball */
+.journey{position:relative;padding-left:46px}
+.journey::before{content:"";position:absolute;left:72px;top:6px;bottom:0;border-left:3px dotted rgba(255,255,255,.55);z-index:0;margin-left:-1.5px}
+.ball{position:absolute;left:72px;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;z-index:0;transition:left .6s cubic-bezier(.3,1.4,.5,1),scale .6s;filter:drop-shadow(0 6px 6px rgba(0,0,0,.4))}
+.ball svg{width:100%;height:100%;display:block}
+.journey.scored .ball{scale:.8}
+.jrow{position:relative;z-index:1}
+.jrow .n{box-shadow:0 0 0 6px var(--red),0 8px 24px -8px rgba(0,0,0,.5)}
+.jrow.goalrow .n{background:transparent;box-shadow:none;border-radius:0;width:64px;height:52px;overflow:visible}
+.goalrow .n svg{width:64px;height:52px;overflow:visible}
+.goalrow h3{font-size:clamp(1.8rem,5vw,3rem);transition:scale .4s;transform-origin:left}
+.journey.scored .goalrow h3{scale:1.25;color:#fff}
+.goalrow .jbody:hover{scale:1;box-shadow:none}
+.journey.scored .net{animation:net .5s ease 2}
+@keyframes net{50%{transform:scale(1.08,.94)}}
+
+
+/* ===== sidebar + horizontal strips ===== */
+.hs-pin{position:relative}
+.hs-track{width:min(1120px,100% - 32px);margin-inline:auto;display:flex;flex-direction:column;gap:30px;padding:clamp(56px,9vw,100px) 0}
+.drag-hint{display:none}
+.hp{min-width:0}
+.hp-intro h2{font-size:clamp(2rem,5vw,3.4rem)}
+.vsep{display:none}
+.hp-a h3{font-size:clamp(1.8rem,4vw,2.8rem)}
+.hp-b .imgs{display:grid;gap:14px}
+.hp-c .phead{font:700 .78rem var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.hp-d .spec{margin-top:0}
+.hp-photo{position:relative;min-height:60vh;display:grid;place-items:center;overflow:hidden;color:#fff;text-align:center;border-radius:16px}
+.hp-photo .pbg{position:absolute;inset:0;background-size:cover;background-position:center}
+.hp-photo::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(163,13,22,.3),rgba(20,20,20,.5))}
+.hp-photo h2{position:relative;z-index:2;font-size:clamp(1.8rem,4vw,3rem);padding:20px}
+.hp-photo .cap{position:absolute;z-index:2;right:12px;bottom:8px;color:#fff;margin:0}
+.hp-a .big{font:700 clamp(5rem,14vw,10rem) var(--display)}
+@media (max-width:900px){
+  .hp-d .spec{grid-template-columns:1fr}
+}
+@media (min-width:901px){
+  body{padding-left:68px}
+  .nav{display:none}
+  html{scroll-padding-top:0}
+  .side{position:fixed;left:0;top:0;bottom:0;width:68px;z-index:60;background:var(--red);color:#fff;display:flex;flex-direction:column;align-items:center;padding:14px 0 18px;gap:10px;box-shadow:6px 0 24px -10px rgba(0,0,0,.45)}
+  .sb-logo img{width:46px;height:46px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.35));transition:scale .25s}
+  .sb-logo:hover img{scale:1.12}
+  .side nav{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;margin-top:12px;flex:1;justify-content:center}
+  .side nav a{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;padding:9px 0;text-decoration:none;font:600 .54rem var(--display);letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.78);position:relative;transition:color .2s,background .2s}
+  .side nav a i{width:9px;height:9px;border-radius:50%;border:2px solid currentColor;transition:scale .25s,background .25s,box-shadow .25s}
+  .side nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
+  .side nav a:hover i{scale:1.35}
+  .side nav a.on{color:#fff;background:rgba(0,0,0,.18)}
+  .side nav a.on i{background:#fff;box-shadow:0 0 0 4px rgba(255,255,255,.28)}
+  .side nav a.on::before{content:"";position:absolute;left:0;top:8px;bottom:8px;width:3px;background:#fff;border-radius:0 3px 3px 0}
+  .sprog{width:3px;height:70px;background:rgba(255,255,255,.28);border-radius:3px;position:relative;overflow:hidden}
+  .sprog::after{content:"";position:absolute;left:0;top:0;width:100%;height:calc(var(--p,0)*100%);background:#fff}
+
+  .hs-pin{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;font-size:clamp(14px,2.25vh,18px);cursor:grab;user-select:none;-webkit-user-select:none}
+  .hs-pin.drag{cursor:grabbing}
+  .hs-track{width:max-content;max-width:none;margin:0;flex-direction:row;align-items:center;gap:0;padding:0 8vw 0 6vw;will-change:transform;height:100%}
+  .hs-track .hp{flex:none;padding:0 2.2vw;max-height:94vh;display:flex;flex-direction:column;justify-content:center}
+  .hp-intro{width:min(560px,42vw)}
+  .hp-intro h2{font-size:clamp(2rem,6vh,3.6rem)}
+  .hp-a{width:min(470px,36vw)}
+  .hp-a .big{font-size:clamp(5rem,18vh,9rem)}
+  .hp-b{width:min(640px,46vw)}
+  .hp-b .imgs.two{grid-template-columns:1fr 1fr}
+  .hp-b .imgbox img{aspect-ratio:16/10;max-height:30vh;transform:scale(1.1)}
+  .hp-b .imgbox.sq img{aspect-ratio:1/1;max-height:24vh}
+  .hp-c{width:min(480px,36vw)}
+  .hp-c .steps li{font-size:.95em}
+  .hp-d{width:min(540px,40vw)}
+  .hp-d .spec{grid-template-columns:1fr;gap:10px;margin-top:0}
+  .hp-d .spec>div{padding:12px 16px}
+  .hp-d .spec ul{font-size:.9em;gap:4px}
+  .hp-d .measure{margin-top:12px;font-size:.9em;padding:10px 14px}
+  .hp-photo{width:min(620px,44vw);height:78vh;min-height:0;margin:0 2.2vw;padding:0}
+  .vsep{display:flex;flex:none;align-items:center;justify-content:center;width:56px;height:80vh;border-left:2px solid var(--line);border-right:2px solid var(--line);margin:0 1.5vw;background:repeating-linear-gradient(135deg,transparent 0 10px,rgba(216,20,31,.06) 10px 20px)}
+  .vsep span{writing-mode:vertical-rl;transform:rotate(180deg);font:700 .8rem var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--red);white-space:nowrap}
+  .vsep span br{display:none}
+  .drag-hint{display:block;position:absolute;right:24px;bottom:22px;z-index:5;font:700 .78rem var(--display);letter-spacing:.14em;text-transform:uppercase;background:rgba(20,20,20,.82);color:#fff;padding:8px 14px;border-radius:99px;animation:nudge 1.8s ease-in-out infinite;pointer-events:none;transition:opacity .3s}
+  .on-red .drag-hint{background:#fff;color:var(--red-deep)}
+  @keyframes nudge{50%{translate:8px 0}}
+  .hs-track .journey{display:flex;padding:0;align-items:flex-start;height:auto;align-self:center}
+  .journey::before{left:0;right:0;top:25px;bottom:auto;border-left:0;border-top:3px dotted rgba(255,255,255,.55);margin:0}
+  .hs-track .jrow{display:block;flex:none;width:clamp(360px,30vw,460px);padding:0 28px 0 0;position:relative}
+  .hs-track .jrow .jbody{margin-top:26px}
+  .hs-track .jrow .n{margin-left:2px}
+  .hs-track .jrow.goalrow{width:clamp(360px,32vw,520px)}
+  .hs-track .goalrow .jbody{padding:0!important;margin-top:22px}
+  .hs-track .jmeta{grid-template-columns:1fr;gap:10px}
+  .jrow .n.hit{scale:1.18}
+  .jrow .n{transition:scale .25s cubic-bezier(.3,1.8,.5,1)}
+  .ball{transition:none}
+  .journey.scored .ball{scale:.8}
+}
+.pp-book{pointer-events:none}
+
+/* cards */
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;box-shadow:var(--shadow)}
+.card h3{margin-bottom:10px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s;display:flex;flex-direction:column;gap:12px}
+.steps li{counter-increment:s;display:grid;grid-template-columns:38px 1fr;gap:14px;align-items:start}
+.steps li::before{content:counter(s);display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--red);color:#fff;font:700 .95rem var(--display)}
+.on-red .steps li::before{background:#fff;color:var(--red-deep)}
+
+/* bands with photo parallax */
+.photoband{position:relative;min-height:85vh;display:grid;place-items:center;overflow:hidden;color:#fff;text-align:center;padding:0}
+.photoband .bg{position:absolute;inset:-28% 0;background-size:cover;background-position:center;will-change:transform}
+.photoband::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(163,13,22,.32),rgba(20,20,20,.42))}
+.photoband .in{position:relative;z-index:2;padding:60px 0}
+.photoband h2{max-width:18ch;margin-inline:auto;text-shadow:0 4px 30px rgba(0,0,0,.4)}
+.photoband .cap{position:absolute;right:14px;bottom:10px;z-index:2;color:#fff;opacity:.85;margin:0}
+
+/* journey */
+.jrow{position:relative;display:grid;grid-template-columns:60px 1fr;gap:20px;padding:0 0 36px}
+.jrow .n{width:52px;height:52px;border-radius:50%;background:#fff;color:var(--red-deep);display:grid;place-items:center;font:700 1.4rem var(--display);position:relative;z-index:2;box-shadow:0 8px 24px -8px rgba(0,0,0,.5)}
+.jbody{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:20px 22px}
+.jbody h3{margin-bottom:6px}
+.jmeta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px;font-size:.92rem}
+.jmeta small{display:block;font:700 .68rem var(--display);letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+
+/* chapters */
+.chapter{padding:clamp(56px,8vw,110px) 0;border-top:1px solid var(--line)}
+.chapter .split{display:grid;grid-template-columns:1fr 1fr;gap:clamp(24px,5vw,64px);align-items:center}
+.chapter.rev .split>:first-child{order:2}
+.big{font:700 clamp(5rem,14vw,11rem) var(--display);line-height:.8;color:transparent;-webkit-text-stroke:2px var(--red);opacity:.55}
+.verb{display:inline-block;background:var(--red);color:#fff;font:700 .8rem var(--display);letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;border-radius:99px;margin-bottom:12px}
+.imgs{display:grid;gap:16px}
+.imgs.two{grid-template-columns:1fr 1fr}
+.imgbox{position:relative;border-radius:16px;overflow:hidden;box-shadow:var(--shadow);background:var(--surface)}
+.imgbox .pw{overflow:hidden}
+.imgbox img{width:100%;object-fit:cover;aspect-ratio:4/3;will-change:transform;transform:scale(1.12)}
+.imgbox.sq img{aspect-ratio:1/1}
+.imgbox figcaption{font-size:.72rem;color:var(--muted);padding:6px 10px;background:var(--surface)}
+.imgbox.real figcaption{color:var(--ok)}
+.spec{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px}
+.spec>div{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--red);border-radius:12px;padding:18px 20px}
+.spec h4{font-size:.78rem;text-transform:uppercase;letter-spacing:.12em;color:var(--red);margin-bottom:8px}
+.spec ul{margin:0;padding-left:18px;font-size:.96rem;display:flex;flex-direction:column;gap:6px}
+.measure{margin-top:18px;padding:14px 18px;border-left:4px solid var(--red);background:var(--surface);border-radius:0 12px 12px 0;font-size:.98rem}
+
+/* rights */
+.light{display:grid;grid-template-columns:130px 1fr 1.2fr;gap:0;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--surface);margin-bottom:14px}
+.light>div{padding:16px 18px}
+.light .st{display:grid;place-items:center;text-align:center;font:700 .85rem var(--display);text-transform:uppercase;letter-spacing:.08em}
+.light.red .st{background:var(--bad-bg);color:var(--bad)}
+.light.yellow .st{background:var(--warn-bg);color:var(--warn)}
+.light.green .st{background:var(--ok-bg);color:var(--ok)}
+.light h4{font-size:1.05rem;margin-bottom:4px}
+.light p{font-size:.94rem}
+.light .why{border-left:1px solid var(--line);color:var(--muted)}
+.who{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.who .card{padding:20px;box-shadow:none}
+.who b{display:block;font:700 .72rem var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+.answer{background:var(--navy);color:#fff;border-radius:20px;padding:clamp(24px,4vw,44px);position:relative;overflow:hidden}
+.answer h3{font-size:clamp(1.4rem,3vw,2.1rem);margin-bottom:12px}
+.answer::after{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;border:2px solid rgba(255,255,255,.18);box-shadow:0 0 0 24px rgba(255,255,255,.06),0 0 0 48px rgba(255,255,255,.04)}
+
+/* stages */
+.stages{display:grid;grid-template-columns:repeat(5,1fr);gap:0;counter-reset:st}
+.stage-c{counter-increment:st;position:relative;padding:22px 18px 22px;background:var(--surface);border:1px solid var(--line);margin-left:-1px;font-size:.93rem}
+.stage-c:first-child{border-radius:14px 0 0 14px;margin-left:0}
+.stage-c:last-child{border-radius:0 14px 14px 0}
+.stage-c::before{content:"Etapa " counter(st);display:block;font:700 .7rem var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+.stage-c b{display:block;font:700 1.05rem var(--display);margin-bottom:6px}
+
+/* tables */
+.scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.95rem}
+th,td{text-align:left;padding:13px 16px;border-bottom:1px solid var(--line);vertical-align:top}
+thead th{font:700 .74rem var(--display);text-transform:uppercase;letter-spacing:.1em;color:var(--muted);background:color-mix(in srgb,var(--bg) 60%,var(--surface))}
+tbody th{font-family:var(--display);font-weight:700}
+tr:last-child>*{border-bottom:0}
+dl.gl{display:grid;grid-template-columns:220px 1fr;margin:0}
+dl.gl dt,dl.gl dd{margin:0;padding:12px 0;border-top:1px solid rgba(255,246,242,.35)}
+dl.gl dt{font:700 1rem var(--display)}
+.src-list{margin:0;padding-left:24px;display:flex;flex-direction:column;gap:8px;font-size:.95rem}
+.src-list a{text-decoration-thickness:1px;text-underline-offset:3px}
+footer{background:var(--navy);color:#fff;padding:50px 0;text-align:center;font-size:.9rem}
+footer img{width:60px;margin:0 auto 14px}
+
+/* reveal: visible at rest, animated only where supported */
+@supports (animation-timeline: view()){
+  .rv{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 45%}
+}
+@keyframes rise{from{opacity:.35;translate:0 40px}to{opacity:1;translate:0 0}}
+
+@media (max-width:900px){
+  .hero .grid,.pp-wrap,.chapter .split,.g2,.g3,.spec,.who,.stages{grid-template-columns:1fr}
+  .chapter.rev .split>:first-child{order:0}
+  .stage-c,.stage-c:first-child,.stage-c:last-child{border-radius:0;margin-left:0;margin-top:-1px}
+  .light{grid-template-columns:1fr}
+  .light .why{border-left:0;border-top:1px solid var(--line)}
+  .hero-photo{max-width:300px}
+  dl.gl{grid-template-columns:1fr}
+  dl.gl dt{border-bottom:0;padding-bottom:0}
+  .jmeta{grid-template-columns:1fr}
+  
+  .nav ul{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
+  .imgbox img{transform:none}
+}
+/* ===== v7 tweaks ===== */
+section{padding:clamp(36px,5vw,72px) 0}
+section.hs{padding:0}
+.hs-track{padding:clamp(36px,6vw,64px) 0}
+.chapter{padding:clamp(36px,5vw,64px) 0}
+.photoband{min-height:70vh}
+#pasaporte{padding-top:clamp(28px,4vw,56px)}
+.rk-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;color:var(--ink)}
+.rk{position:relative;background:var(--surface);border-radius:18px;padding:24px 24px 20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 18px 40px -20px rgba(0,0,0,.5);overflow:hidden;border-top:5px solid var(--navy)}
+.rk-n{position:absolute;right:14px;top:2px;font:700 4.4rem var(--display);line-height:1;color:transparent;-webkit-text-stroke:1.5px rgba(20,33,61,.22)}
+.rk h3{font-size:1.3rem;padding-right:70px;min-height:2.4em;display:flex;align-items:center}
+.rk-b{border-left:4px solid var(--line);padding:2px 0 2px 14px}
+.rk-b small{display:block;font:700 .68rem var(--display);letter-spacing:.14em;text-transform:uppercase;margin-bottom:3px}
+.rk-b p{font-size:.98rem;line-height:1.45}
+.rk-b.bad{border-color:var(--bad)}
+.rk-b.bad small{color:var(--bad)}
+.rk-b.good{border-color:var(--ok)}
+.rk-b.good small{color:var(--ok)}
+.rk-f{margin-top:auto;display:flex;align-items:center;gap:8px;padding-top:12px;border-top:1px dashed var(--line);font-size:.9rem}
+.rk-f small{font:700 .68rem var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.rk-f span{background:var(--navy);color:#fff;font:600 .8rem var(--display);padding:4px 12px;border-radius:99px}
+@media (max-width:760px){.rk-grid{grid-template-columns:1fr}.rk h3{min-height:0}}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90}
+/* ===== v8: propuestas más visuales ===== */
+#propuestas .hs-pin{background:
+  repeating-radial-gradient(circle at 0 100%,transparent 0 34px,rgba(216,20,31,.09) 34px 36px),
+  repeating-radial-gradient(circle at 100% 0,transparent 0 34px,rgba(20,33,61,.07) 34px 36px),
+  radial-gradient(rgba(20,20,20,.10) 1.3px,transparent 1.5px) 0 0/22px 22px,
+  var(--bg)}
+.hp-c{background:var(--red);color:#fff;border-radius:20px;padding:22px 24px;box-shadow:0 20px 44px -18px rgba(163,13,22,.7);background-image:repeating-radial-gradient(circle at 100% 0,transparent 0 22px,rgba(255,255,255,.1) 22px 24px)}
+.hp-c .phead{color:#fff;opacity:.9}
+.hp-c .steps li::before{background:#fff;color:var(--red-deep)}
+.hp-a .big{-webkit-text-stroke:2px var(--red);opacity:.85}
+@media (min-width:901px){
+  .hs-track .hp{padding:0 1.1vw}
+  .hs-track{padding:0 5vw 0 3vw}
+  .hp-intro{width:min(520px,38vw)}
+  .hp-a{width:min(430px,31vw)}
+  .hp-b{width:min(860px,56vw)}
+  .hp-b>.imgs{display:grid;grid-template-columns:1fr;grid-template-rows:1.35fr 1fr;gap:12px;height:76vh}
+  .hp-b>.imgs>.imgbox:only-child{grid-row:1 / -1}
+  .hp-b>.imgs.two{grid-template-columns:1fr 1fr;grid-template-rows:none}
+  .hp-b .imgs .imgs.two{grid-template-columns:1fr 1fr;height:100%;gap:12px}
+  .hp-b .imgbox{position:relative;height:100%;min-height:0;display:block;border-radius:18px;border:5px solid #fff;box-shadow:10px 10px 0 -2px rgba(216,20,31,.85),0 24px 40px -18px rgba(0,0,0,.5)}
+  .hp-b .imgbox .pw{height:100%}
+  .hp-b .imgbox img,.hp-b .imgbox.sq img{width:100%;height:100%;max-height:none;aspect-ratio:auto;object-fit:cover}
+  .hp-b .imgbox figcaption{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(transparent,rgba(0,0,0,.7));color:#fff;padding:22px 12px 8px}
+  .hp-b .imgbox.real figcaption{color:#fff}
+  .hp-c{width:min(450px,32vw);align-self:center;max-height:84vh}
+  .hp-d{width:min(500px,36vw)}
+  .hp-photo{width:min(780px,54vw);height:82vh;margin:0 1.1vw;border:5px solid #fff;box-shadow:10px 10px 0 -2px rgba(20,33,61,.9)}
+  .vsep{background:var(--red) repeating-linear-gradient(135deg,transparent 0 10px,rgba(255,255,255,.12) 10px 20px);border:0;border-radius:12px;width:60px;margin:0 .8vw;height:84vh}
+  .vsep span{color:#fff}
+  .hp-b .card{box-shadow:0 18px 40px -18px rgba(0,0,0,.45)}
+}
+.hp-c .phead{display:block;margin:2px 0 12px;padding-top:4px}
+.face .photo{cursor:pointer}
+.face .photo #ppFace{position:absolute;inset:0;display:block}
+.face .photo #ppFace:empty{display:none}
+.face .photo #ppFace.pop{animation:facePop .5s cubic-bezier(.2,1.6,.4,1)}
+@keyframes facePop{0%{transform:scale(.4) rotate(-12deg);opacity:0}100%{transform:none;opacity:1}}
+.face .photo:hover{outline:2px solid var(--red);outline-offset:2px}
+.ppact{display:flex;gap:6px;flex-wrap:wrap;margin:-2px 0 4px}
+.ppact button{font:600 .62em var(--body);padding:.45em .8em;border-radius:99px;border:1px solid #b9ab94;background:#fff;color:#2a2420;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.ppact button:hover{transform:scale(1.06);box-shadow:0 0 0 3px rgba(216,20,31,.18);border-color:var(--red)}
+.face,.face *{-webkit-backface-visibility:hidden;backface-visibility:hidden}
+.face.visa{background:
+  repeating-radial-gradient(circle at 15% 100%,transparent 0 9px,rgba(31,47,134,.10) 9px 10px),
+  repeating-radial-gradient(circle at 90% 0,transparent 0 9px,rgba(216,20,31,.10) 9px 10px),
+  linear-gradient(180deg,#f4f0e6,#ece6d6);gap:.5em;position:absolute}
+.vz-top{display:flex;align-items:baseline;gap:.4em;border-bottom:2px solid var(--red-deep);padding-bottom:.25em}
+.vz-top span{font:800 1.5em var(--display);color:var(--red-deep);letter-spacing:.14em}
+.vz-top b{font:700 .8em var(--display);color:var(--navy);letter-spacing:.12em}
+.vz-globe{position:absolute;right:-12%;top:22%;width:78%;color:rgba(31,47,134,.16);pointer-events:none}
+.vz-grid{display:grid;grid-template-columns:1fr 1fr;gap:.55em .6em;position:relative;margin-top:.3em}
+.vz-grid>div{font:600 .78em/1.25 var(--body);color:#2a2420;border-bottom:1px solid #b9ab94;padding-bottom:.3em}
+.vz-grid .w{grid-column:1/-1}
+.vz-grid small{display:block;font:700 .62em var(--body);letter-spacing:.12em;text-transform:uppercase;color:#8a7e6e;margin-bottom:.15em}
+.vz-seal{position:absolute;left:1.1em;bottom:3.6em;width:26%;aspect-ratio:1;border-radius:50%;background:conic-gradient(from 30deg,#f6e7b0,#cfe6f3,#f3cfe0,#f6e7b0,#cfe6f3,#f6e7b0);box-shadow:inset 0 0 0 2px rgba(255,255,255,.7),0 3px 8px -3px rgba(0,0,0,.35);display:grid;place-items:center;opacity:.95}
+.vz-seal img{width:66%}
+.vz-mrz{position:absolute;left:1.1em;right:1em;bottom:1em;font:600 .6em/1.5 ui-monospace,Menlo,monospace;letter-spacing:.08em;color:#4a4036;white-space:nowrap;overflow:hidden}
+.pprow{display:flex;gap:.7em;align-items:flex-start}
+.pprow .photo{flex:0 0 42%}
+.ppside{flex:1;display:flex;flex-direction:column;gap:.45em;min-width:0}
+.ppside .ppact{margin:0}
+.sign{position:relative}
+.sign small{font:700 .6em var(--body);letter-spacing:.12em;text-transform:uppercase;color:#8a7e6e}
+.sign canvas{display:block;width:100%;height:auto;aspect-ratio:300/90;border-bottom:1px solid #8a7e6e;background:rgba(255,255,255,.35);border-radius:3px;cursor:crosshair;touch-action:none}
+.sign button{position:absolute;right:2px;top:-2px;font:600 .6em var(--body);color:#8a7e6e;background:none;border:0;cursor:pointer;text-decoration:underline}
+.scanrow{display:flex;align-items:center;gap:.6em;flex-wrap:wrap}
+.scanrow button{font:700 .72em var(--body);padding:.55em 1em;border-radius:99px;border:0;background:var(--navy);color:#fff;cursor:pointer;transition:transform .15s,box-shadow .15s}
+.scanrow button:hover{transform:scale(1.06);box-shadow:0 0 0 4px rgba(31,47,134,.2)}
+.scanrow span{font:700 .72em var(--body);color:#1c7a3a}
+#ppCode{position:relative;overflow:hidden;transition:background .3s,color .3s}
+#ppCode.ok{background:rgba(28,122,58,.12);color:#1c7a3a}
+#ppCode.scanning::after{content:"";position:absolute;left:0;right:0;height:3px;background:var(--red);box-shadow:0 0 12px 3px rgba(216,20,31,.6);animation:scanLine 1.3s ease-in-out}
+@keyframes scanLine{0%{top:0}50%{top:calc(100% - 3px)}100%{top:0}}
+.pp2{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.ppside .sign{display:none}
+.face .sign canvas{aspect-ratio:300/62}
+#ppCode{letter-spacing:.06em;white-space:nowrap;font-size:1.05em}
+/* portada: menos aire abajo y patrón hasta la banda azul */
+.hero{min-height:calc(100svh - 72px)}
+.hero .grid{padding:36px 0 56px}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:110px;pointer-events:none;z-index:0;
+  background:
+    linear-gradient(135deg,transparent 75%,rgba(255,255,255,.13) 75% 77%,transparent 77%) 0 0/28px 28px,
+    linear-gradient(225deg,transparent 75%,rgba(255,255,255,.13) 75% 77%,transparent 77%) 0 0/28px 28px,
+    linear-gradient(180deg,transparent,rgba(0,0,0,.14));
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 70%);mask-image:linear-gradient(180deg,transparent,#000 70%)}
+.hero .wrap,.hero .grid{position:relative;z-index:1}
+.scrollhint{display:none}
+/* ================= v2 · interacciones nuevas ================= */
+/* --- pasaporte embebido --- */
+.pp-intro{max-width:760px;margin:0 auto;text-align:center;align-items:center}
+.pp-intro .lead{margin-inline:auto}
+.pp-frame{position:relative;width:min(1240px,100%);margin:10px auto 0;height:min(88vh,860px);min-height:560px}
+.pp-frame iframe{width:100%;height:100%;border:0;display:block;background:transparent;color-scheme:normal}
+
+/* --- tarjetas que se dan vuelta (camino y riesgos) --- */
+.flip{perspective:1600px;display:grid}
+.flip-in{display:grid;transition:transform .8s cubic-bezier(.2,1.25,.35,1);transform-style:preserve-3d}
+.flip.on .flip-in{transform:rotateY(180deg)}
+.flip-f,.flip-b{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;min-width:0}
+.flip-b{transform:rotateY(180deg)}
+.flip-btn{display:inline-flex;align-items:center;gap:8px;margin-top:14px;padding:9px 14px;border-radius:99px;border:1.5px solid currentColor;background:transparent;color:inherit;font:700 .78rem var(--display);letter-spacing:.06em;cursor:pointer;transition:background .25s,color .25s,transform .25s}
+.flip-btn:hover{transform:translateY(-2px)}
+.flip-btn i{font-style:normal;transition:transform .4s}
+.flip-btn:hover i{transform:rotate(180deg)}
+/* camino */
+.jflip .flip-f,.jflip .flip-b{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.3);border-radius:16px;padding:20px 22px}
+.jflip .flip-b{background:#fff;color:var(--red-deep);border-color:#fff}
+.jflip .flip-b .jmeta{grid-template-columns:1fr!important;margin-top:4px}
+.jflip .flip-b .jmeta small{opacity:.75}
+.jflip .flip-b h3{font-size:1.05rem;margin-bottom:8px}
+.jflip .flip-btn:hover{background:#fff;color:var(--red-deep)}
+.jflip .flip-b .flip-btn:hover{background:var(--red-deep);color:#fff}
+.jbody.jflip{background:none!important;border:0!important;padding:0!important}
+.jbody.jflip:hover{scale:1;box-shadow:none}
+/* riesgos */
+.rk.rkf{background:none;box-shadow:none;padding:0;border-top:0;overflow:visible}
+.rkf .flip-f,.rkf .flip-b{position:relative;background:var(--surface);border-radius:18px;padding:24px 24px 20px;display:flex;flex-direction:column;gap:14px;box-shadow:0 18px 40px -20px rgba(0,0,0,.5);overflow:hidden;border-top:5px solid var(--navy)}
+.rkf .flip-b{border-top-color:var(--ok)}
+.rkf .flip-btn{align-self:flex-start;margin-top:auto;color:var(--ok);border-color:var(--ok)}
+.rkf .flip-btn:hover{background:var(--ok);color:#fff}
+.rkf .flip-b .flip-btn{color:var(--muted);border-color:var(--line)}
+.rk-sello{position:absolute;right:16px;bottom:16px;width:96px;height:96px;border-radius:50%;border:3px solid var(--ok);color:var(--ok);display:grid;place-items:center;text-align:center;font:800 .82rem/1 var(--display);letter-spacing:.08em;transform:rotate(-14deg) scale(2.4);opacity:0;pointer-events:none}
+.rk-sello::before{content:"";position:absolute;inset:5px;border-radius:50%;border:1.5px dashed var(--ok)}
+.rkf.on .rk-sello{animation:sella .55s .45s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes sella{0%{transform:rotate(-14deg) scale(2.4);opacity:0}60%{opacity:.95}100%{transform:rotate(-14deg) scale(1);opacity:.9}}
+.rkf .flip-b .rk-b.good p{font-size:1.06rem;padding-right:96px}
+.rkf.on .flip-b{animation:latido .6s .3s}
+@keyframes latido{40%{box-shadow:0 0 0 6px rgba(30,122,70,.35),0 18px 40px -20px rgba(0,0,0,.5)}}
+.chispa{position:fixed;left:0;top:0;z-index:999;pointer-events:none;border-radius:2px;will-change:transform,opacity}
+.onda{position:fixed;z-index:998;pointer-events:none;border-radius:50%;border:3px solid #fff;translate:-50% -50%;animation:onda .7s ease-out forwards}
+@keyframes onda{from{width:10px;height:10px;opacity:1}to{width:260px;height:260px;opacity:0}}
+
+/* --- etapas: el mazo de figuritas --- */
+.et-pin{position:relative}
+.et-stage{display:flex;flex-direction:column;gap:clamp(18px,3vh,34px)}
+.deck{position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.fig{--cw:100%;aspect-ratio:5/7;perspective:1400px;position:relative}
+.fig-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .9s cubic-bezier(.2,1.2,.35,1)}
+.fig-f,.fig-b{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;overflow:hidden;box-shadow:0 22px 40px -18px rgba(0,0,0,.6)}
+.fig-b{transform:rotateY(180deg);background:repeating-radial-gradient(circle at 50% 50%,transparent 0 14px,rgba(255,255,255,.14) 14px 16px),linear-gradient(160deg,var(--red),var(--red-deep));border:6px solid #fff;display:grid;place-items:center}
+.fig-b img{width:46%;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
+.fig-f{background:#fff;color:#141414;border:6px solid #fff;display:flex;flex-direction:column}
+.fig-top{background:var(--red);color:#fff;padding:9px 12px 8px;display:flex;justify-content:space-between;align-items:center;font:700 .66rem var(--display);letter-spacing:.16em;text-transform:uppercase;border-radius:8px 8px 0 0}
+.fig-top img{width:18px;height:18px}
+.fig-art{position:relative;flex:0 0 38%;background:radial-gradient(circle at 50% 120%,rgba(216,20,31,.18),transparent 60%),repeating-linear-gradient(135deg,#F4EEE6 0 10px,#EFE7DC 10px 20px);display:grid;place-items:center;overflow:hidden}
+.fig-art .num{position:absolute;right:6px;bottom:-14px;font:800 5.6rem/1 var(--display);color:transparent;-webkit-text-stroke:2px rgba(216,20,31,.25)}
+.fig-art svg{width:42%;height:auto;color:var(--red-deep);position:relative}
+.fig-tx{padding:10px 12px 12px;display:flex;flex-direction:column;gap:6px;flex:1}
+.fig-tx b{font:700 1rem/1.1 var(--display);color:var(--navy)}
+.fig-tx p{margin:0;font-size:.86rem;line-height:1.35;color:#3d3833}
+.fig-pie{margin-top:auto;font:700 .55rem var(--display);letter-spacing:.18em;text-transform:uppercase;color:var(--red);border-top:1px dashed #e4dcd1;padding-top:6px}
+.et-mazo{position:absolute;left:50%;bottom:-10px;font:700 .72rem var(--display);letter-spacing:.2em;text-transform:uppercase;color:var(--muted);translate:-50% 0;white-space:nowrap;transition:opacity .4s}
+@media (min-width:901px){
+  .et-pin{height:340vh}
+  #etapas{padding-top:0!important;padding-bottom:0!important}
+  .et-stage{position:sticky;top:0;height:100vh;justify-content:center}
+  .deck{height:min(48vh,420px);display:block}
+  .deck .fig{position:absolute;left:50%;top:50%;width:clamp(150px,min(15vw,30vh),230px);aspect-ratio:5/7;translate:-50% -50%;will-change:transform}
+  .deck .fig-in{transition:none}
+}
+@media (max-width:900px){
+  .deck{grid-template-columns:minmax(0,1fr);justify-items:center}
+  .deck .fig{width:min(320px,86vw)}
+  .fig .fig-in{transform:rotateY(180deg) translateY(30px)}
+  .fig.dada .fig-in{transform:none}
+  .et-mazo{display:none}
+}
+
+/* --- libros (propuestas) --- */
+.hp-libro{position:relative;--h:min(64vh,560px);--w:calc(var(--h)*.74)}
+.lb-stick{position:relative;display:flex;flex-direction:column;align-items:center;gap:16px}
+.libro{position:relative;width:var(--w);height:var(--h);transform:translateX(var(--shift,0px))}
+.lb-spread{position:relative;width:calc(var(--w)*2);height:var(--h);display:flex;justify-content:flex-end}
+.lb-leaf{position:absolute;inset:0;transform-origin:left center;transform:perspective(2400px) rotateY(calc(var(--f,0)*-180deg));transform-style:preserve-3d}
+.lb-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;border-radius:4px 14px 14px 4px;background:#FFFDF8;color:#141414;box-shadow:0 1px 2px rgba(0,0,0,.18),0 22px 44px -20px rgba(0,0,0,.55);padding:clamp(18px,3.6vh,32px) clamp(18px,2.4vw,30px);display:flex;flex-direction:column;gap:12px;font-size:clamp(13px,1.9vh,15.5px)}
+.lb-face.back{transform:rotateY(180deg);border-radius:14px 4px 4px 14px}
+.lb-face.front::before{content:"";position:absolute;inset:0 auto 0 0;width:18px;background:linear-gradient(90deg,rgba(0,0,0,.09),transparent);pointer-events:none}
+.lb-face.back::before{content:"";position:absolute;inset:0 0 0 auto;width:18px;background:linear-gradient(270deg,rgba(0,0,0,.09),transparent);pointer-events:none}
+.lb-face::after{content:"";position:absolute;inset:0;background:linear-gradient(270deg,rgba(0,0,0,.25),transparent 70%);opacity:calc(var(--f,0)*(1 - var(--f,0))*3);pointer-events:none}
+.lb-hd{display:flex;justify-content:space-between;align-items:baseline;font:700 .7rem var(--display);letter-spacing:.16em;text-transform:uppercase;color:var(--red);border-bottom:1.5px solid var(--red);padding-bottom:8px}
+.lb-hd span:last-child{color:#9a928a}
+.lb-face h4{margin:4px 0 0;font:700 1.45em/1.05 var(--display);color:var(--navy)}
+.lb-face ul,.lb-face ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:9px}
+.lb-face ul li{position:relative;padding-left:18px;line-height:1.38}
+.lb-face ul li::before{content:"";position:absolute;left:0;top:.5em;width:8px;height:8px;border-radius:50%;background:var(--red)}
+.lb-face .steps{gap:9px} .lb-face .steps li{grid-template-columns:28px 1fr;gap:10px;line-height:1.36}
+.lb-face .steps li::before{width:26px;height:26px;font-size:.8rem}
+.lb-face .tag{font-size:.75em}
+.lb-face .lb-big{font:700 1.25em/1.3 var(--display);color:var(--navy);margin:0}
+.lb-face .lb-pie{margin-top:auto;font:600 .62rem var(--display);letter-spacing:.2em;text-transform:uppercase;color:#b3aaa0;text-align:center}
+.lb-face li{opacity:0;transform:translateX(10px);transition:opacity .45s,transform .5s cubic-bezier(.2,.8,.2,1)}
+.lb-face.vis li{opacity:1;transform:none}
+.lb-face.vis li:nth-child(2){transition-delay:.06s}.lb-face.vis li:nth-child(3){transition-delay:.12s}.lb-face.vis li:nth-child(4){transition-delay:.18s}.lb-face.vis li:nth-child(5){transition-delay:.24s}.lb-face.vis li:nth-child(6){transition-delay:.3s}
+.lb-cover{background:linear-gradient(160deg,var(--red),var(--red-deep));color:#fff;justify-content:center;align-items:center;text-align:center;gap:14px}
+.lb-cover::after{display:none}
+.lb-cover .rings{position:absolute;inset:0;background:repeating-radial-gradient(circle at 50% 40%,transparent 0 22px,rgba(255,255,255,.12) 22px 24px)}
+.lb-cover img{width:34%;position:relative;filter:drop-shadow(0 8px 18px rgba(0,0,0,.35))}
+.lb-cover small{position:relative;font:700 .7rem var(--display);letter-spacing:.28em;text-transform:uppercase;opacity:.85}
+.lb-cover b{position:relative;font:700 1.9em/1 var(--display)}
+.lb-cover em{position:relative;font-style:normal;font:600 .72rem var(--display);letter-spacing:.2em;text-transform:uppercase;border:1px solid rgba(255,255,255,.6);border-radius:99px;padding:6px 12px;animation:pulsa 1.8s ease-in-out infinite}
+@keyframes pulsa{50%{opacity:.5}}
+.lb-fin{justify-content:center;align-items:center;text-align:center}
+.lb-fin img{width:28%;opacity:.9}
+.lb-fin p{font:700 1.1em/1.2 var(--display);color:var(--navy);margin:0}
+.lb-nav{display:flex;align-items:center;gap:14px;font:700 .75rem var(--display);letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+.lb-nav button{width:40px;height:40px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);font-size:1.1rem;cursor:pointer}
+.lb-nav button:disabled{opacity:.35;cursor:default}
+.lb-dots{display:flex;gap:6px}.lb-dots i{width:18px;height:4px;border-radius:2px;background:var(--line);transition:background .3s,width .3s}.lb-dots i.on{background:var(--red);width:30px}
+@media (min-width:901px){
+  .hs-track .hp-libro{padding:0;max-height:none;height:100%;justify-content:center}
+  .hp-libro .lb-stick{position:absolute;top:50%;left:0;translate:0 -50%;will-change:transform}
+  .hp-libro .lb-nav button{display:none}
+}
+@media (max-width:900px){
+  .hp-libro{display:flex;justify-content:center;padding:10px 0}
+  .hp-libro{--w:calc((100vw - 40px)/2);--h:calc(var(--w)/.74)}
+  .lb-face{font-size:11.5px;padding:12px;gap:8px;overflow-y:auto}
+  .lb-face .lb-pie{display:none}
+  .lb-face .steps li::before{width:22px;height:22px}
+}
+/* ================= v3 ================= */
+/* --- pasaporte: como el original, con la mesa clara y las hojas que pasan al bajar --- */
+#pasaporte{--ink:#1B1B1B;--muted:#5d554c;color:#1B1B1B;background:radial-gradient(120% 90% at 62% 45%,#E3DCCF,#CFC6B6)!important;padding:0!important}
+#pasaporte .eyebrow{color:#C8323A}
+#pasaporte h2{color:#1B1B1B}
+.pp-sticky{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;padding:clamp(56px,9vw,100px) 16px 30px}
+.pp-txt{max-width:440px;margin:0 auto;text-align:center}
+.pp-txt .lead{color:#4a433c}
+.pp-hint{margin:6px 0 0;font:700 .72rem var(--display);letter-spacing:.18em;text-transform:uppercase;color:#C8323A;display:flex;gap:8px;align-items:center;justify-content:center}
+.pp-hint i{display:inline-block;width:14px;height:22px;border:2px solid currentColor;border-radius:8px;position:relative}
+.pp-hint i::after{content:"";position:absolute;left:50%;top:4px;width:2px;height:5px;margin-left:-1px;background:currentColor;border-radius:1px;animation:rueda 1.4s ease-in-out infinite}
+@keyframes rueda{60%{transform:translateY(6px);opacity:0}}
+#pasaporte .pp-frame{width:100%;height:min(82vh,760px);min-height:520px;margin:0}
+@media (min-width:901px){
+  #pasaporte{height:calc(100vh + 9 * 62vh)}
+  .pp-sticky{position:sticky;top:0;height:100vh;grid-template-columns:minmax(260px,.36fr) minmax(0,1fr);align-items:center;gap:1vw;padding:0 0 0 clamp(80px,7vw,120px)}
+  .pp-txt{text-align:left;margin:0}
+  .pp-hint{justify-content:flex-start}
+  #pasaporte .pp-frame{height:100vh;min-height:0}
+}
+
+/* --- propuestas: pila de tarjetas --- */
+.hp-pila{position:relative}
+.pl-stick{position:relative;display:flex;flex-direction:column;gap:18px}
+.pl-area{position:relative}
+.pl-card{transform-origin:50% 0}
+.pl-card.pl-leida{filter:brightness(.78) saturate(.85)!important}
+.pl-card.pl-leida-x::after{content:"✓ LEÍDA";position:absolute;top:-12px;right:14px;background:var(--red);color:#fff;font:700 .7rem var(--display);letter-spacing:.14em;padding:5px 10px;border-radius:99px;box-shadow:0 6px 14px -6px rgba(0,0,0,.5)}
+.pl-card.pl-leida:hover{filter:none!important}
+.pl-card{position:absolute;left:0;top:0;transform-origin:50% 0;will-change:transform,opacity;transition:filter .3s}
+.pl-card .hp-c{width:auto!important;max-height:none!important}
+.pl-card .pl-spec{display:block;margin:0}
+.pl-card .pl-spec>div{padding:22px 24px;box-shadow:0 22px 44px -20px rgba(0,0,0,.55)}
+.pl-card .pl-spec h4{font-size:.82rem;margin-bottom:12px}
+.pl-card .pl-spec ul{font-size:1rem;gap:9px}
+.pl-medir{background:var(--surface);border-radius:12px;border-left:5px solid var(--red);padding:22px 24px;box-shadow:0 22px 44px -20px rgba(0,0,0,.55)}
+.pl-medir h4{font:700 .82rem var(--display);letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin:0 0 10px}
+.pl-medir-p{margin:0;font:600 1.15rem/1.4 var(--display);color:var(--ink)}
+.pl-card.pl-atras{filter:brightness(.75) saturate(.85)}
+.pl-card.pl-front{filter:none}
+.pl-dots{display:none;flex-wrap:wrap;gap:6px 14px;font:700 .64rem var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);width:min(470px,34vw)}
+.pl-dots span{display:flex;align-items:center;gap:6px;transition:color .3s}
+.pl-dots i{width:8px;height:8px;border-radius:50%;border:1.5px solid currentColor;transition:background .3s}
+.pl-dots span.on{color:var(--red)} .pl-dots span.on i,.pl-dots span.hecho i{background:currentColor}
+@media (min-width:901px){
+  .hs-track .hp-pila{padding:0;max-height:none;height:100%;justify-content:center}
+  .hp-pila .pl-stick{position:absolute;top:50%;left:0;translate:0 -50%;transform:none!important}
+}
+
+/* --- glosario: tarjetas para tocar --- */
+.gl-cnt{margin:0;font:700 .74rem var(--display);letter-spacing:.16em;text-transform:uppercase;color:#fff;opacity:.9}
+.gl-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.gl-c{position:relative;height:150px;border:0;padding:0;background:none;cursor:pointer;perspective:1200px;font:inherit;color:inherit;text-align:left;opacity:0;transform:translateY(30px) rotate(-2deg);transition:opacity .6s,transform .7s cubic-bezier(.2,1.3,.4,1);transition-delay:var(--d,0ms)}
+.gl-c.in{opacity:1;transform:none}
+.gl-in{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,1.3,.35,1)}
+.gl-c.on .gl-in{transform:rotateY(180deg)}
+.gl-f,.gl-b{position:absolute;inset:0;border-radius:16px;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:18px 20px;display:flex;flex-direction:column;box-shadow:0 18px 36px -18px rgba(60,0,4,.65)}
+.gl-f{background:#fff;color:#141414;justify-content:space-between;background-image:repeating-radial-gradient(circle at 105% -5%,transparent 0 16px,rgba(216,20,31,.07) 16px 18px)}
+.gl-f small{font:700 .7rem var(--display);letter-spacing:.16em;color:var(--red)}
+.gl-f b{font:700 1.35rem/1.05 var(--display);color:#14213D}
+.gl-f em{font-style:normal;font:700 .7rem var(--display);letter-spacing:.14em;text-transform:uppercase;color:var(--red);transition:letter-spacing .3s}
+.gl-c:hover .gl-f em{letter-spacing:.22em}
+.gl-c:hover .gl-f{box-shadow:0 0 0 3px #fff,0 24px 40px -16px rgba(60,0,4,.7)}
+.gl-b{background:#14213D;color:#fff;transform:rotateY(180deg);gap:8px;justify-content:center}
+.gl-b b{font:700 .74rem var(--display);letter-spacing:.16em;text-transform:uppercase;color:#F3D02F}
+.gl-b span{font-size:1rem;line-height:1.4}
+@media (max-width:900px){ .gl-grid{grid-template-columns:repeat(2,minmax(0,1fr))} .gl-c{height:170px} .gl-f b{font-size:1.1rem} .gl-b span{font-size:.9rem} }
+@media (max-width:520px){ .gl-grid{grid-template-columns:minmax(0,1fr)} .gl-c{height:140px} }
+</style>
+</head>
+<body>
+<aside aria-label="Secciones" class="side">
+<a aria-label="Inicio" class="sb-logo" href="#inicio"><img alt="Escudo de Argentinos Juniors" src="img/escudo.svg"/></a>
+<nav>
+<a data-sec="inicio" href="#inicio"><i></i><span>Inicio</span></a>
+<a data-sec="pasaporte" href="#pasaporte"><i></i><span>Pasaporte</span></a>
+<a data-sec="resumen" href="#resumen"><i></i><span>Resumen</span></a>
+<a data-sec="camino" href="#camino"><i></i><span>Camino</span></a>
+<a data-sec="propuestas" href="#propuestas"><i></i><span>Propuestas</span></a>
+<a data-sec="etapas" href="#etapas"><i></i><span>Etapas</span></a>
+<a data-sec="riesgos" href="#riesgos"><i></i><span>Riesgos</span></a>
+<a data-sec="glosario" href="#glosario"><i></i><span>Glosario</span></a>
+<a data-sec="fuentes" href="#fuentes"><i></i><span>Fuentes</span></a>
+</nav>
+<div class="sprog"></div>
+</aside><nav aria-label="Secciones" class="nav">
+<div class="wrap">
+<a class="brand" href="#inicio"><img alt="Escudo de Argentinos Juniors" src="img/escudo.svg"/><span>Argentinos para argentinos</span></a>
+<ul>
+<li><a href="#pasaporte">Pasaporte</a></li>
+<li><a href="#camino">Camino del socio</a></li>
+<li><a href="#propuestas">Propuestas</a></li>
+<li><a href="#fuentes">Fuentes</a></li>
+</ul>
+</div>
+<div class="progress" id="progress"></div>
+</nav>
+<header class="hero pat-stripes" id="inicio">
+<div aria-hidden="true" class="ring pat-rings" data-par="-0.12"></div>
+<canvas aria-hidden="true" id="heroCv"></canvas>
+<div class="wrap grid">
+<div data-par="0.05">
+<p class="eyebrow">Brief #2 · Socio Internacional</p>
+<h1>Argentinos <em>para argentinos</em></h1>
+<p class="claim">El mejor lugar de la cancha está a 10.000 km.</p>
+<p class="firma">Exportamos talento. Importamos hinchas.</p>
+<a class="btn" href="#pasaporte">Abrí el pasaporte ↓</a>
+</div>
+<figure class="hero-photo" id="heroPhoto" style="margin:0">
+<div class="frame" id="heroFrame"><img alt="Pasaporte rojo de socio adherente apoyado sobre un sillón" height="1400" src="img/pasaporte.jpg" width="1128"/></div>
+</figure>
+</div>
+<div class="scrollhint">Deslizá</div>
+</header>
+<div aria-hidden="true" class="marquee"><div><span>Argentinos para argentinos</span><span>Exportamos talento. Importamos hinchas</span><span>Argentinos para argentinos</span><span>Exportamos talento. Importamos hinchas</span><span>Argentinos para argentinos</span><span>Exportamos talento. Importamos hinchas</span><span>Argentinos para argentinos</span><span>Exportamos talento. Importamos hinchas</span></div></div>
+<section id="pasaporte">
+<div class="pp-sticky">
+<div class="pp-txt stack">
+<p class="eyebrow">El primer paso</p>
+<h2>Es lo primero que llega a casa.</h2>
+<p class="lead">El socio Adherente recibe por correo una libreta con su nombre y un código único. Con ese código se activa todo lo demás. Probalo: completá tus datos, firmá y sellá en tu bar.</p>
+<p class="pp-hint"><i></i>Seguí bajando: las hojas pasan solas</p>
+</div>
+<div class="pp-frame"><iframe src="pasaporte.html" title="Pasaporte interactivo del socio Adherente"></iframe></div>
+</div>
+</section>
+<section class="pat-dots" id="resumen">
+<div class="wrap stack" style="gap:44px">
+<div class="stack rv">
+<p class="eyebrow">Resumen</p>
+<h2>La campaña en una página</h2>
+<p class="lead">Este sitio explica qué se propone, cómo se hace cada cosa, quién la hace y qué necesitamos del club. Si solo leés una sección, que sea esta.</p>
+</div>
+<div class="grid g2">
+<div class="card rv"><h3>El punto de partida</h3><p>El brief pide <b>más socios fuera del país, con ingresos recurrentes</b>. El público son hinchas del exterior que hoy no son socios. La categoría Adherente y el alta online ya existen: falta generar deseo <sup><a href="#f2">[2]</a></sup>. El club tiene hoy 20.069 socios <sup><a href="#f1">[1]</a></sup>.</p></div>
+<div class="card rv"><h3>La idea</h3><p>Ser socio Adherente es <b>recibir el pasaporte a la mejor ubicación del estadio</b>: un lugar desde el que se puede mirar el club por dentro, alentar con otros hinchas y sumar sellos, esté donde esté.</p></div>
+</div>
+<div class="card rv">
+<h3 style="margin-bottom:18px">Cómo funciona, en cinco pasos</h3>
+<ol class="steps">
+<li><div><b>Te afiliás online.</b> Alta de socio Adherente, como hoy, con un dato más: la dirección donde recibir el pasaporte.</div></li>
+<li><div><b>Te llega el pasaporte por correo.</b> Una libreta física, con tu nombre y un código único.</div></li>
+<li><div><b>Activás tu cuenta con el código.</b> Entrás a la web del socio y se abre todo lo digital.</div></li>
+<li><div><b>Mirás y alentás.</b> Cámaras exclusivas (arco, túnel y Entre Bichos), sujetas a lo que permitan los derechos de transmisión, y bares aliados para alentar en grupo.</div></li>
+<li><div><b>Sellás tu pasaporte.</b> Solo en lugares reales: bares y pubs aliados, y el estadio.</div></li>
+</ol>
+</div>
+
+</div>
+</section>
+<div class="photoband" id="band1">
+<div class="bg" data-par="0.32" style="background-image:url(img/real-cancha.jpg)"></div>
+<div class="in wrap" data-par="-0.1"><p class="eyebrow" style="color:#fff">La mejor ubicación</p><h2>El mejor lugar de la cancha está a 10.000 km.</h2></div>
+<p class="cap">Foto del club, material de referencia</p>
+</div>
+<section class="on-red pat-rings hs" id="camino">
+<div class="hs-pin">
+<div aria-hidden="true" class="drag-hint">Arrastrá o scrolleá →</div>
+<div class="hs-track">
+<div class="hp hp-intro stack">
+<p class="eyebrow">El camino del socio</p>
+<h2>Del primer clic al sello en el pasaporte</h2>
+<p class="lead">Cada paso dice qué pasa, quién lo hace y qué hace falta para que funcione.</p>
+</div>
+<div class="journey" id="journey">
+<div aria-hidden="true" class="ball" id="ball"><svg viewbox="0 0 40 40"><g id="ballg"><circle cx="20" cy="20" fill="#fff" r="18.5" stroke="#141414" stroke-width="1.6"></circle><polygon fill="#141414" points="20,12.5 27,17.6 24.3,25.8 15.7,25.8 13,17.6"></polygon><path d="M20 12.5V4M27 17.6l8-2.6M24.3 25.8l5 6.8M15.7 25.8l-5 6.8M13 17.6l-8-2.6" fill="none" stroke="#141414" stroke-width="1.6"></path><path d="M20 2.5l5 3-2 3.4h-6l-2-3.4zM37 14l1 6-4 2-3-3.6 1.5-4.4zM3 14l-1 6 4 2 3-3.6-1.5-4.4zM30 35l-4.5 2.2-3.5-2.7 1.6-4.5 5.2.3zM10 35l4.5 2.2 3.5-2.7-1.6-4.5-5.2.3z" fill="#141414"></path></g></svg></div>
+<div class="jrow rv"><div class="n">1</div><div class="jbody"><h3>Se entera y se afilia</h3><p>Ve el video o una pieza en redes, entra a la web y completa el alta de socio Adherente. Ahora también carga su dirección de envío.</p><div class="jmeta"><div><small>Quién</small>Equipo de campaña (comunicación) y club (alta).</div><div><small>Qué hace falta</small>Agregar el campo de domicilio postal al alta existente.</div></div></div></div>
+<div class="jrow rv"><div class="n">2</div><div class="jbody"><h3>Se prepara su pasaporte</h3><p>El sistema genera un pedido con un código único. El pasaporte se imprime en lotes y se despacha con seguimiento.</p><div class="jmeta"><div><small>Quién</small>Plataforma (pedido), imprenta y correo.</div><div><small>Qué hace falta</small>Diseño aprobado por el club y un correo con seguimiento internacional.</div></div></div></div>
+<div class="jrow rv"><div class="n">3</div><div class="jbody"><h3>Recibe el pasaporte en su casa</h3><p>Le llega un aviso por mail con el seguimiento. En el buzón encuentra el sobre y adentro la libreta, con su nombre y el código.</p><div class="jmeta"><div><small>Quién</small>Correo.</div><div><small>Qué hace falta</small>Reenvío sin costo para el socio si se pierde, y código reemitible.</div></div></div></div>
+<div class="jrow rv"><div class="n">4</div><div class="jbody"><h3>Activa su cuenta</h3><p>Entra a la web del socio, ingresa el código y se abre el acceso a las cámaras, a Entre Bichos y al mapa de bares.</p><div class="jmeta"><div><small>Quién</small>Plataforma.</div><div><small>Qué hace falta</small>Validar el código una sola vez por pasaporte y asociarlo a un socio.</div></div></div></div>
+<div class="jrow rv"><div class="n">5</div><div class="jbody"><h3>Mira y alienta</h3><p>Elige una cámara o acompaña a un anfitrión de la tribuna, según lo que se autorice emitir. Si hay un bar aliado cerca, va a verlo con otros hinchas.</p><div class="jmeta"><div><small>Quién</small>Plataforma, equipo técnico en partidos, bares aliados.</div><div><small>Qué hace falta</small>Autorización sobre transmisión, conectividad en el estadio y convenios con bares.</div></div></div></div>
+<div class="jrow rv"><div class="n">6</div><div class="jbody"><h3>Sella su pasaporte</h3><p>En un bar aliado escanea el QR del bar y le sellan la libreta. Si viaja a La Paternal, lo sellan en el estadio. El sello queda registrado también en la web.</p><div class="jmeta"><div><small>Quién</small>Bar aliado o personal del club.</div><div><small>Qué hace falta</small>Un sello físico único por lugar y un código QR que cambia en cada partido.</div></div></div></div>
+<div class="jrow rv"><div class="n">7</div><div class="jbody"><h3>Se queda y trae a otros</h3><p>Renueva su cuota, comparte lo que vio y puede regalar un pasaporte a otro argentino. Esta última es una posibilidad más, no el centro de la campaña.</p><div class="jmeta"><div><small>Quién</small>Club (renovación), plataforma (regalo).</div><div><small>Qué hace falta</small>Flujo de alta “para otra persona” con consentimiento del destinatario.</div></div></div></div>
+<div class="jrow goalrow rv" style="padding-bottom:0"><div class="n" id="goalMark"><svg class="net" viewbox="0 0 64 52"><rect fill="rgba(255,255,255,.12)" height="46" stroke="#fff" stroke-width="4" width="58" x="3" y="4"></rect><path d="M3 16h58M3 28h58M3 40h58M17 4v46M32 4v46M47 4v46" stroke="rgba(255,255,255,.6)" stroke-width="1.2"></path></svg></div><div class="jbody" style="background:none;border:0;padding:6px 0"><h3>¡Gol! Socio sellado.</h3><p>Pasaporte en mano, cuenta activa y primer sello: ya es parte de la hinchada.</p></div></div>
+</div>
+</div>
+</div>
+</section>
+<section class="hs" id="propuestas">
+<div class="hs-pin">
+<div aria-hidden="true" class="drag-hint">Arrastrá o scrolleá →</div>
+<div class="hs-track">
+<div class="hp hp-intro stack">
+<p class="eyebrow">Propuestas en detalle</p>
+<h2>Qué es, cómo se hace y qué necesita cada una</h2>
+<p class="lead">Cinco propuestas, todas desprendidas del pasaporte. Cada una responde las mismas preguntas, para poder compararlas.</p>
+</div>
+<div class="vsep"><span>El pasaporte</span></div>
+<div class="hp hp-a stack"><div aria-hidden="true" class="big">01</div><span class="verb">El primer paso</span><h3>El pasaporte</h3><p><b>Qué es.</b> Una libreta física de socio Adherente, con formato de pasaporte, que llega por correo a la casa del socio. Trae un código único que activa todo lo digital. Es la llave de todo lo demás.</p></div>
+<div class="hp hp-b"><div class="imgs two rv">
+<figure class="imgbox sq" style="margin:0"><div class="pw"><img alt="Sobre con el pasaporte y el escudo de Argentinos Juniors" data-hpar="0.05" height="1400" src="img/sobre.jpg" width="1400"/></div></figure>
+<figure class="imgbox sq" style="margin:0"><div class="pw"><img alt="Pasaporte abierto con sellos de bares y del estadio" data-hpar="0.05" height="782" src="img/sellos.jpg" width="1400"/></div></figure>
+</div></div>
+<div class="hp hp-c stack"><h4 class="phead">Paso a paso</h4><ol class="steps">
+<li><div>El socio se afilia online y carga su dirección de envío.</div></li>
+<li><div>El sistema crea el pedido y le asigna un código único.</div></li>
+<li><div>El club aprueba el lote y se imprime en Argentina.</div></li>
+<li><div>Se envía con seguimiento internacional. El socio recibe el número por mail.</div></li>
+<li><div>El socio ingresa el código en la web y activa su cuenta.</div></li>
+<li><div>Los sellos físicos se suman en bares aliados y en el estadio, y se espejan en la web.</div></li>
+</ol></div>
+<div class="hp hp-d"><div class="spec">
+<div><h4>Quién lo hace</h4><ul><li>Equipo de campaña: diseño, arte y producción.</li><li>Imprenta y correo: impresión y envío.</li><li>Club: aprueba escudo, diseño y lotes.</li></ul></div>
+<div><h4>Qué necesita del club</h4><ul><li>Aprobar el uso del escudo y del formato pasaporte.</li><li>Recolectar domicilio postal en el alta Adherente.</li><li>Un responsable que apruebe cada lote.</li></ul></div>
+<div><h4>Riesgos y cómo se resuelven</h4><ul><li>Envío perdido: servicio certificado, reenvío sin costo y código reemitible.</li><li>No es un documento oficial: la libreta lo aclara en la contratapa.</li><li>Atlético Tucumán usa “Pasaporte Monumental” para otro sistema <sup><a href="#f3">[3]</a></sup>: conviene chequear el nombre antes de imprimir.</li></ul></div>
+</div><p class="measure"><b>Cómo se mide.</b> Porcentaje de pasaportes activados a los 30 días de recibidos, días promedio de entrega y sellos por socio.</p></div>
+<div class="vsep"><span>Cámaras exclusivas: arco y túnel</span></div>
+<div class="hp hp-a stack"><div aria-hidden="true" class="big">02</div><span class="verb">Mirá · 1 de 2</span><h3>Cámaras exclusivas: arco y túnel</h3><p><b>Qué es.</b> Dos cámaras fijas que muestran lo que la televisión no muestra: la vista desde detrás del arco y la salida de los jugadores por el túnel. El socio elige la cámara desde la web. <span class="tag val">Sujeto a derechos de transmisión</span></p></div>
+<div class="hp hp-b"><div class="imgs rv">
+<figure class="imgbox real" style="margin:0"><div class="pw"><img alt="El túnel inflable de salida a la cancha del estadio de Argentinos Juniors" data-hpar="0.05" height="810" src="img/real-tunel.jpg" width="1467"/></div><figcaption>Foto del club, material de referencia</figcaption></figure>
+<div class="imgs two">
+<figure class="imgbox sq" style="margin:0"><div class="pw"><img alt="Vista desde detrás del arco hacia la cancha" height="782" src="img/arco.jpg" width="1400"/></div></figure>
+<figure class="imgbox sq" style="margin:0"><div class="pw"><img alt="Salida de los jugadores por el túnel hacia la cancha" height="782" src="img/tunel.jpg" width="1400"/></div></figure>
+</div>
+</div></div>
+<div class="hp hp-c stack"><h4 class="phead">Paso a paso</h4><ol class="steps">
+<li><div>Se consulta a AFA y Liga qué se puede emitir.</div></li>
+<li><div>El club aprueba los puntos de montaje y se instalan las cámaras.</div></li>
+<li><div>La señal viaja por la red del estadio o por conexión celular combinada.</div></li>
+<li><div>La plataforma emite a los socios con pasaporte activado, dentro de lo autorizado.</div></li>
+<li><div>El socio elige entre las cámaras.</div></li>
+</ol></div>
+<div class="hp hp-d"><div class="spec">
+<div><h4>Quién lo hace</h4><ul><li>Proveedor técnico: instalación y operación.</li><li>Club: autoriza y da conectividad.</li></ul></div>
+<div><h4>Qué necesita del club</h4><ul><li>Autorización de las cámaras y de los puntos de montaje.</li><li>Gestionar ante AFA y Liga el permiso de emisión <span class="tag val">A validar</span>.</li><li>Energía y conexión en cada punto.</li></ul></div>
+<div><h4>Riesgos y plan B</h4><ul><li>Riesgo principal: los derechos de transmisión.</li><li>Plan B: emitir solo lo que no es el partido (llegada, calentamiento, salida por el túnel, entretiempo y después del partido).</li><li>Se consulta antes de comprar equipos.</li></ul></div>
+</div><p class="measure"><b>Cómo se mide.</b> Horas vistas por socio, momentos con más audiencia y cámara preferida.</p></div>
+<div class="hp hp-photo"><div class="pbg" data-hpar="0.18" style="background-image:url(img/real-vestuario.jpg)"></div><h2>Lo que la tele no muestra.</h2><p class="cap">Foto del club, material de referencia</p></div>
+<div class="vsep"><span>Entre Bichos</span></div>
+<div class="hp hp-a stack"><div aria-hidden="true" class="big">03</div><span class="verb">Mirá · 2 de 2</span><h3>Entre Bichos</h3><p><b>Qué es.</b> La tribuna en primera persona. Un hincha que va a la cancha lleva una GoPro sujeta con una bincha elástica a la gorra. Un socio del exterior lo elige y ve el partido con sus ojos y escucha los cantos. No es una cámara más: es un hincha con otro hincha. <span class="tag val">Es la propuesta con más riesgo</span></p></div>
+<div class="hp hp-b"><div class="imgs rv">
+<figure class="imgbox" style="margin:0"><div class="pw"><img alt="Vista desde la gorra de un hincha, en la tribuna" data-hpar="0.05" height="782" src="img/entrebichos.jpg" width="1400"/></div></figure>
+<figure class="imgbox" style="margin:0;max-width:340px;justify-self:center"><div class="pw"><img alt="Gorra roja con el escudo y una GoPro sujeta con una bincha elástica" height="630" src="img/gorra.jpg" style="aspect-ratio:4/3;transform:none" width="840"/></div><figcaption>El equipo del anfitrión</figcaption></figure>
+</div></div>
+<div class="hp hp-c stack"><h4 class="phead">Paso a paso</h4><ol class="steps">
+<li><div>Se convoca a hinchas socios que van a la cancha para ser anfitriones.</div></li>
+<li><div>Se los elige, firman el acuerdo de uso de imagen y reglas de conducta, y reciben una charla corta.</div></li>
+<li><div>El día del partido retiran el kit: gorra con escudo, GoPro, bincha y equipo de envío.</div></li>
+<li><div>El socio del exterior elige a qué anfitrión acompañar, según el sector de la tribuna.</div></li>
+<li><div>Durante lo que esté autorizado, ve y escucha lo que ve el anfitrión. Al final se devuelve el kit.</div></li>
+</ol></div>
+<div class="hp hp-d"><div class="spec">
+<div><h4>Quién lo hace</h4><ul><li>Anfitriones voluntarios.</li><li>Técnico del equipo de campaña, en la puerta.</li><li>Club: seguridad y autorización.</li></ul></div>
+<div><h4>Qué necesita del club</h4><ul><li>Autorización de seguridad para ingresar equipos de grabación <span class="tag val">A validar</span>.</li><li>Cartel visible en la tribuna que avise de la grabación.</li><li>Definir el beneficio del anfitrión (a proponer: mercadería o descuento en el abono).</li></ul></div>
+<div><h4>Riesgos y plan B</h4><ul><li>Derechos de transmisión: si no se permite el partido, se usa antes y después.</li><li>Privacidad de terceros: aviso en la tribuna y emisión con un retraso corto para poder cortar si hace falta.</li><li>Si el equipo no puede ingresar: celular en un soporte aprobado.</li></ul></div>
+</div><p class="measure"><b>Cómo se mide.</b> Anfitriones activos, sesiones, tiempo viendo con un anfitrión y repetición de pares anfitrión–socio.</p></div>
+<div class="vsep"><span>Bares y pubs aliados</span></div>
+<div class="hp hp-a stack"><div aria-hidden="true" class="big">04</div><span class="verb">Alentá</span><h3>Bares y pubs aliados</h3><p><b>Qué es.</b> Bares en ciudades del exterior que pasan los partidos de Argentinos y tienen el sello oficial para el pasaporte. Es el lugar físico donde el socio alienta con otros hinchas y suma sellos. Cada bar aliado es territorio Argentinos: entrar es pisar suelo del club.</p></div>
+<div class="hp hp-b"><div class="imgs rv">
+<figure class="imgbox" style="margin:0"><div class="pw"><img alt="Pasaporte abierto con sellos de bares y del estadio" data-hpar="0.05" height="782" src="img/sellos.jpg" width="1400"/></div></figure>
+</div></div>
+<div class="hp hp-c stack"><h4 class="phead">Paso a paso</h4><ol class="steps">
+<li><div>Se eligen las ciudades piloto con los datos de hinchas que tenga el club, y dos bares por ciudad.</div></li>
+<li><div>Se firma un convenio simple: el bar recibe un kit y aparece en el mapa.</div></li>
+<li><div>El kit trae un sello oficial único, almohadilla, bandera, cartel y un código QR.</div></li>
+<li><div>En cada partido, el socio llega, escanea el QR del bar y el bar sella el pasaporte.</div></li>
+<li><div>El sello queda registrado en la web, con la fecha y el partido.</div></li>
+<li><div>Cada mes se revisa cuántos sellos tuvo cada bar.</div></li>
+</ol></div>
+<div class="hp hp-d"><div class="spec">
+<div><h4>Quién lo hace</h4><ul><li>Coordinador part-time de la campaña.</li><li>Bares aliados.</li><li>Club: aprueba el convenio tipo.</li></ul></div>
+<div><h4>Qué necesita del club</h4><ul><li>Un modelo de convenio y el permiso de uso de marca para los bares.</li><li>Un referente de marketing para el vínculo.</li></ul></div>
+<div><h4>Riesgos y cómo se resuelven</h4><ul><li>Poca concurrencia: se empieza por bares donde ya se juntan argentinos.</li><li>Sellos falsos: sello numerado y QR que cambia en cada partido.</li><li>La licencia para pasar el partido en cada país es responsabilidad del bar.</li></ul></div>
+</div><p class="measure"><b>Cómo se mide.</b> Bares activos, sellos por bar y por partido, y socios distintos por bar.</p></div>
+<div class="vsep"><span>Regalar el pasaporte</span></div>
+<div class="hp hp-a stack"><div aria-hidden="true" class="big">05</div><span class="verb">Regalá · una posibilidad más</span><h3>Regalar el pasaporte</h3><p><b>Qué es.</b> Un socio, o cualquier persona, le regala el pasaporte a otro argentino que vive afuera. La dedicatoria es: “Para: un argentino. De: Argentinos.”</p></div>
+<div class="hp hp-b"><div class="stack">
+<div class="card"><h3>Qué necesita</h3><p>Un flujo de alta “para otra persona” y el consentimiento del destinatario antes de guardar sus datos.</p></div>
+<div class="card"><h3>Cómo se mide</h3><p>Pasaportes regalados y porcentaje activado.</p></div>
+</div></div>
+<div class="hp hp-c stack"><h4 class="phead">Paso a paso</h4><ol class="steps">
+<li><div>Quien regala paga el alta en la web y carga nombre, dirección y un mensaje para el destinatario.</div></li>
+<li><div>El pasaporte llega con la dedicatoria.</div></li>
+<li><div>El destinatario ingresa el código, acepta ser socio y sus datos se confirman en ese momento.</div></li>
+</ol></div>
+<div class="hp hp-d"><div class="spec"></div></div>
+</div>
+</div>
+</section>
+<section class="pat-dots" id="etapas">
+<div class="wrap stack" style="gap:30px">
+<div class="stack rv">
+<p class="eyebrow">Etapas</p>
+<h2>De la aprobación al lanzamiento</h2>
+<p class="lead">Cinco etapas en orden. Las duraciones se definen con el club cuando respondan los pedidos.</p>
+</div>
+<div class="stages rv">
+<div class="stage-c"><b>Acuerdos y permisos</b>Consulta de derechos a AFA y Liga, escudo, domicilio en el alta, convenio tipo.</div>
+<div class="stage-c"><b>Diseño y producción</b>Diseño del pasaporte y los sellos, plataforma básica, cámaras autorizadas.</div>
+<div class="stage-c"><b>Prueba piloto</b>Un partido de prueba, bares en pocas ciudades y primeros pasaportes.</div>
+<div class="stage-c"><b>Lanzamiento</b>Video de campaña, redes, bares aliados y primeras altas.</div>
+<div class="stage-c"><b>Medición y ajuste</b>Revisión de indicadores y decisiones sobre qué escalar.</div>
+</div>
+</div>
+</section>
+<section class="on-red pat-stripes" id="comunicacion">
+<div class="wrap stack" style="gap:30px">
+<div class="stack rv"><p class="eyebrow">Comunicación</p><h2>Cómo se cuenta</h2></div>
+<div class="grid g3">
+<div class="card rv" style="color:var(--ink)"><h3>Campaña</h3><p>“Argentinos para argentinos”. Claim: “El mejor lugar de la cancha está a 10.000 km.” Firma: “Exportamos talento. Importamos hinchas.”</p></div>
+<div class="card rv" style="color:var(--ink)"><h3>Video de lanzamiento</h3><p>Una pieza de unos 60 segundos. Abre con humor de hinchas y cierra con una llamada a asociarse: aparece el pasaporte, se abre y cae el sello “Presente”. Guion en desarrollo.</p></div>
+<div class="card rv" style="color:var(--ink)"><h3>Piezas para redes y bares</h3><p>Imágenes del pasaporte y de los sellos, y piezas para cada ciudad con los bares aliados donde se ve el partido.</p></div>
+</div>
+</div>
+</section>
+<section class="on-red pat-rings" id="riesgos">
+<div class="wrap stack" style="gap:30px">
+<div class="stack rv"><p class="eyebrow">Riesgos y validaciones</p><h2>Qué puede salir mal y cómo lo resolvemos</h2></div>
+<div class="rk-grid"><article class="rk rv"><div class="rk-n">01</div><h3>Derechos de transmisión</h3><div class="rk-b bad"><small>Qué podría pasar</small><p>No se permite emitir el partido, o solo con retraso.</p></div><div class="rk-b good"><small>Cómo lo resolvemos</small><p>Consulta formal primero. Plan B: contenido antes, en el entretiempo y después del partido.</p></div></article><article class="rk rv"><div class="rk-n">02</div><h3>Privacidad en la tribuna</h3><div class="rk-b bad"><small>Qué podría pasar</small><p>Entre Bichos graba a personas que no dieron permiso.</p></div><div class="rk-b good"><small>Cómo lo resolvemos</small><p>Cartel de aviso, acuerdo con anfitriones, retraso corto y política de datos.</p></div></article><article class="rk rv"><div class="rk-n">03</div><h3>Conectividad</h3><div class="rk-b bad"><small>Qué podría pasar</small><p>La señal se corta.</p></div><div class="rk-b good"><small>Cómo lo resolvemos</small><p>Conexión celular combinada y prueba en un partido antes del lanzamiento.</p></div></article><article class="rk rv"><div class="rk-n">04</div><h3>Envíos y aduana</h3><div class="rk-b bad"><small>Qué podría pasar</small><p>El pasaporte se pierde o se demora.</p></div><div class="rk-b good"><small>Cómo lo resolvemos</small><p>Servicio certificado con seguimiento, reenvío sin costo y código reemitible. Se prueba en cada país piloto.</p></div></article><article class="rk rv"><div class="rk-n">05</div><h3>Poco uso en bares</h3><div class="rk-b bad"><small>Qué podría pasar</small><p>Los bares no se llenan de hinchas.</p></div><div class="rk-b good"><small>Cómo lo resolvemos</small><p>Empezar por bares donde ya se juntan argentinos.</p></div></article><article class="rk rv"><div class="rk-n">06</div><h3>Bajas de socios</h3><div class="rk-b bad"><small>Qué podría pasar</small><p>El socio paga unos meses y se va.</p></div><div class="rk-b good"><small>Cómo lo resolvemos</small><p>Novedades mensuales, sellos como motivo para volver y revisión de retención.</p></div></article><article class="rk rv"><div class="rk-n">07</div><h3>El tono del humor</h3><div class="rk-b bad"><small>Qué podría pasar</small><p>“Bicho raro” puede leerse como cargada de hinchada rival.</p></div><div class="rk-b good"><small>Cómo lo resolvemos</small><p>Usarlo solo en primera persona, entre hinchas de Argentinos, y revisar el guion con el club.</p></div></article><article class="rk rv"><div class="rk-n">08</div><h3>El nombre “pasaporte”</h3><div class="rk-b bad"><small>Qué podría pasar</small><p>Se confunde con un documento oficial o choca con otra marca.</p></div><div class="rk-b good"><small>Cómo lo resolvemos</small><p>Aclarar en la libreta que no es un documento y chequear el nombre antes de imprimir.</p></div></article></div>
+</div>
+</section>
+<div class="photoband" id="band3" style="min-height:60vh">
+<div class="bg" data-par="0.32" style="background-image:url(img/real-tunel.jpg)"></div>
+<div class="in wrap"><h2>Exportamos talento. Importamos hinchas.</h2><a class="btn" href="#pasaporte">Volver al pasaporte ↑</a></div>
+<p class="cap">Foto del club, material de referencia</p>
+</div>
+<section class="on-red pat-stripes" id="glosario">
+<div class="wrap stack" style="gap:30px">
+<div class="stack rv"><p class="eyebrow">Glosario</p><h2>Los términos, en palabras simples</h2></div>
+<dl class="gl">
+<dt>Socio Adherente</dt><dd>Categoría de socio del club que ya existe y que se puede contratar online.</dd>
+<dt>Pasaporte</dt><dd>Libreta física del socio, con formato de pasaporte. No es un documento oficial de viaje.</dd>
+<dt>Código de activación</dt><dd>Código único impreso en cada pasaporte. Se ingresa en la web para activar las funciones digitales.</dd>
+<dt>Sello</dt><dd>Marca física que se estampa en el pasaporte en un bar aliado o en el estadio, y que se registra también en la web.</dd>
+<dt>Cámara exclusiva</dt><dd>Ángulo de imagen que solo ven los socios, como el arco, el túnel o la gorra de un hincha.</dd>
+<dt>Anfitrión</dt><dd>Hincha voluntario que va a la cancha con una cámara en la gorra, en Entre Bichos.</dd>
+<dt>Streaming</dt><dd>Emisión de video por internet.</dd>
+<dt>Derechos de transmisión</dt><dd>Permisos que controlan quién puede emitir imágenes de los partidos.</dd>
+<dt>Retención</dt><dd>Porcentaje de socios que siguen pagando pasado un tiempo.</dd>
+</dl>
+</div>
+</section>
+<section id="fuentes">
+<div class="wrap stack" style="gap:24px">
+<div class="stack rv">
+<p class="eyebrow">Fuentes</p>
+<h2>De dónde sale cada dato</h2>
+<p class="lead">Información pública, consultada en noviembre de 2026. Algunas notas son de años anteriores: se indica cuando importa.</p>
+</div>
+<ol class="src-list">
+<li id="f1"><a href="https://www.canal26.com/deportes/2026/01/28/informe-de-clubes-2025-la-afa-dio-a-conocer-la-lista-de-los-equipos-con-mas-cantidad-de-socios-del-futbol-argentino/">Canal 26: Informe de Clubes 2025 de la AFA, con 20.069 socios de Argentinos.</a></li>
+<li id="f2">Brief #2 “Socio Internacional”, Emprendimiento de Negocios, Prof. Damián Garófalo, octubre de 2026.</li>
+<li id="f3"><a href="https://www.lagaceta.com.ar/nota/1142482/deportes/moratoria-pasaporte-monumental-dos-grandes-novedades-nueva-campana-socios-atletico-tucuman.html">La Gaceta: Atlético Tucumán y su “Pasaporte Monumental”.</a></li>
+</ol>
+</div>
+</section>
+<footer>
+<img alt="Escudo de Argentinos Juniors" src="img/escudo.svg"/>
+<p>Argentinos para argentinos · MiniBrief #2 Socio Internacional · Grupo 1, DMT6AV</p>
+<p style="opacity:.7;margin-top:6px">Las imágenes marcadas como ilustrativas fueron generadas con IA. Las fotos marcadas como del club son material de referencia.</p>
+</footer>
+<canvas aria-hidden="true" id="confetti"></canvas>
+<script>
+/* ================= v2 · interacciones nuevas (corre antes del script principal) ================= */
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var mqDesk = matchMedia('(min-width:901px)');
+  var $ = function(s,r){ return (r||document).querySelector(s); };
+  var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+  function easeOutBack(t){ var c1=1.4, c3=c1+1; return 1 + c3*Math.pow(t-1,3) + c1*Math.pow(t-1,2); }
+  function smooth(t){ return t*t*(3-2*t); }
+
+  /* ---------- chispas: una explosión chiquita ---------- */
+  function explotar(x, y, cols){
+    if (reduce) return;
+    cols = cols || ['#1E7A46','#6FD39A','#FFFFFF','#D8141F','#14213D'];
+    var o = document.createElement('div'); o.className = 'onda'; o.style.left = x+'px'; o.style.top = y+'px'; o.style.borderColor = cols[0]; document.body.appendChild(o); setTimeout(function(){ o.remove(); }, 800);
+    for (var i=0;i<34;i++){
+      var c = document.createElement('i'); c.className = 'chispa';
+      var s = 5 + Math.random()*8; c.style.width = s+'px'; c.style.height = (Math.random()<.5? s : s*.4)+'px'; c.style.background = cols[i%cols.length];
+      if (i%5===0) c.style.borderRadius = '50%';
+      document.body.appendChild(c);
+      var a = Math.random()*Math.PI*2, v = 90 + Math.random()*170, r = Math.random()*720-360;
+      c.animate([{transform:'translate('+x+'px,'+y+'px) rotate(0)',opacity:1},
+                 {transform:'translate('+(x+Math.cos(a)*v)+'px,'+(y+Math.sin(a)*v+60)+'px) rotate('+r+'deg)',opacity:0}],
+                {duration:700+Math.random()*500,easing:'cubic-bezier(.15,.7,.3,1)'}).onfinish = (function(el){ return function(){ el.remove(); }; })(c);
+    }
+  }
+
+  /* ---------- riesgos: tocá "cómo lo resolvemos" y la tarjeta se da vuelta ---------- */
+  $$('#riesgos .rk').forEach(function(rk){
+    var n = $('.rk-n',rk), h = $('h3',rk), bad = $('.rk-b.bad',rk), good = $('.rk-b.good',rk);
+    if (!h || !bad || !good) return;
+    rk.classList.add('rkf','flip'); rk.innerHTML = '';
+    var inn = document.createElement('div'); inn.className = 'flip-in';
+    var f = document.createElement('div'); f.className = 'flip-f';
+    var b = document.createElement('div'); b.className = 'flip-b';
+    f.appendChild(n.cloneNode(true)); f.appendChild(h.cloneNode(true)); f.appendChild(bad);
+    var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'flip-btn'; bt.innerHTML = 'Cómo lo resolvemos <i>↻</i>'; f.appendChild(bt);
+    b.appendChild(n.cloneNode(true)); b.appendChild(h.cloneNode(true)); b.appendChild(good);
+    var sello = document.createElement('div'); sello.className = 'rk-sello'; sello.innerHTML = 'RESUELTO'; b.appendChild(sello);
+    var vb = document.createElement('button'); vb.type = 'button'; vb.className = 'flip-btn'; vb.innerHTML = '<i>↺</i> Volver al problema'; b.appendChild(vb);
+    inn.appendChild(f); inn.appendChild(b); rk.appendChild(inn);
+    bt.addEventListener('click', function(e){ var r = bt.getBoundingClientRect(); explotar(r.left + r.width/2, r.top + r.height/2); rk.classList.add('on'); });
+    vb.addEventListener('click', function(){ rk.classList.remove('on'); });
+  });
+  var rkLead = $('#riesgos .stack.rv');
+  if (rkLead && !$('.lead', rkLead)){ var lp = document.createElement('p'); lp.className = 'lead'; lp.textContent = 'Cada tarjeta es un riesgo. Tocá “Cómo lo resolvemos” para ver la solución.'; rkLead.appendChild(lp); }
+
+  /* ---------- camino del socio: quién y qué hace falta, del otro lado ---------- */
+  $$('#journey .jrow:not(.goalrow) .jbody').forEach(function(jb){
+    var h = $('h3',jb), p = $('p',jb), meta = $('.jmeta',jb);
+    if (!h || !meta) return;
+    jb.classList.add('jflip','flip'); jb.innerHTML = '';
+    var inn = document.createElement('div'); inn.className = 'flip-in';
+    var f = document.createElement('div'); f.className = 'flip-f';
+    var b = document.createElement('div'); b.className = 'flip-b';
+    f.appendChild(h); if (p) f.appendChild(p);
+    var bt = document.createElement('button'); bt.type = 'button'; bt.className = 'flip-btn'; bt.innerHTML = 'Quién y qué hace falta <i>↻</i>'; f.appendChild(bt);
+    var h2 = document.createElement('h3'); h2.textContent = h.textContent; b.appendChild(h2); b.appendChild(meta);
+    var vb = document.createElement('button'); vb.type = 'button'; vb.className = 'flip-btn'; vb.innerHTML = '<i>↺</i> Volver'; b.appendChild(vb);
+    inn.appendChild(f); inn.appendChild(b); jb.appendChild(inn);
+    bt.addEventListener('click', function(){ jb.classList.add('on'); });
+    vb.addEventListener('click', function(){ jb.classList.remove('on'); });
+  });
+
+  /* ---------- etapas: un mazo de figuritas que se reparte al bajar ---------- */
+  var ICON = [
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6h18l8 8v28H12z"/><path d="M30 6v8h8M18 22h14M18 29h14M18 36h8"/></svg>',
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 40l6-2L38 14l-4-4L10 34z"/><path d="M30 14l4 4M8 40l2-6"/><circle cx="36" cy="36" r="5"/></svg>',
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 42V6"/><path d="M12 8c8-4 14 4 24 0v18c-10 4-16-4-24 0"/></svg>',
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 20v8h6l14 8V12l-14 8z"/><path d="M34 18c3 3 3 9 0 12M38 14c6 6 6 14 0 20"/></svg>',
+    '<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 42h36"/><path d="M10 36V26M20 36V18M30 36V22M40 36V10"/></svg>'
+  ];
+  var et = $('#etapas'), stagesEl = $('#etapas .stages');
+  var figs = [];
+  if (et && stagesEl){
+    var wrap = $('.wrap', et);
+    var pin = document.createElement('div'); pin.className = 'et-pin';
+    var stg = document.createElement('div'); stg.className = 'et-stage wrap';
+    var head = $('.stack.rv', wrap); if (head) stg.appendChild(head);
+    var deck = document.createElement('div'); deck.className = 'deck';
+    $$('.stage-c', stagesEl).forEach(function(c, i){
+      var t = $('b', c).textContent; $('b', c).remove(); var d = c.textContent.trim();
+      var fg = document.createElement('div'); fg.className = 'fig';
+      fg.innerHTML = '<div class="fig-in"><div class="fig-f"><div class="fig-top"><span>Etapa '+(i+1)+'</span><img src="img/escudo.svg" alt=""></div>'+
+        '<div class="fig-art"><span class="num">'+(i+1)+'</span>'+ICON[i%ICON.length]+'</div>'+
+        '<div class="fig-tx"><b>'+t+'</b><p>'+d+'</p><span class="fig-pie">Argentinos para argentinos</span></div></div>'+
+        '<div class="fig-b"><img src="img/escudo.svg" alt=""></div></div>';
+      deck.appendChild(fg); figs.push(fg);
+    });
+    var hint = document.createElement('span'); hint.className = 'et-mazo'; hint.textContent = 'Seguí bajando para repartir el mazo'; deck.appendChild(hint);
+    stg.appendChild(deck); pin.appendChild(stg);
+    wrap.parentNode.replaceChild(pin, wrap);
+    if (!mqDesk.matches || reduce){
+      var ioF = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ setTimeout(function(){ e.target.classList.add('dada'); }, (figs.indexOf(e.target)%2)*150); ioF.unobserve(e.target); } }); }, {threshold:.3});
+      figs.forEach(function(f){ ioF.observe(f); });
+    }
+  }
+  function dealFrame(){
+    if (!et || !figs.length || !mqDesk.matches || reduce) return;
+    var r = et.getBoundingClientRect(), H = innerHeight; if (r.bottom < 0 || r.top > H) return;
+    var p = clamp(-r.top / Math.max(1, r.height - H), 0, 1);
+    var deckEl = $('.deck', et), dw = deckEl.clientWidth, cw = figs[0].offsetWidth, n = figs.length;
+    var gap = Math.min(22, (dw - cw*n)/(n-1)); if (gap < -cw*.25) gap = -cw*.25;
+    var span = cw*n + gap*(n-1);
+    figs.forEach(function(fg, i){
+      var t = clamp((p - .06 - i*.15)/.15, 0, 1), e = easeOutBack(t), s = smooth(t);
+      var fx = -span/2 + cw/2 + i*(cw+gap), fy = 0, fr = (i-(n-1)/2)*2.4;
+      var dx = 0, dy = H*.32 + i*-3, dr = -6 + i*3;
+      var x = dx + (fx-dx)*e, y = dy + (fy-dy)*e - Math.sin(Math.PI*s)*80, rot = dr + (fr-dr)*s;
+      fg.style.transform = 'translate('+x.toFixed(1)+'px,'+y.toFixed(1)+'px) rotate('+rot.toFixed(2)+'deg) scale('+(1 + Math.sin(Math.PI*s)*.12).toFixed(3)+')';
+      fg.style.zIndex = t > 0 ? 10 + i : 5 - i;
+      $('.fig-in', fg).style.transform = 'rotateY('+(180 - 180*s).toFixed(1)+'deg)';
+    });
+    var h2 = $('.et-mazo', et); if (h2) h2.style.opacity = p > .1 ? 0 : 1;
+  }
+
+  /* ---------- propuestas: las tarjetas pasan de atrás hacia adelante al scrollear (solo compu) ---------- */
+  var pilas = [];
+  if (mqDesk.matches && !reduce){
+    $$('#propuestas .hp-c').forEach(function(hc){
+      var hd = hc.nextElementSibling && hc.nextElementSibling.classList.contains('hp-d') ? hc.nextElementSibling : null;
+      var cards = [];
+      var panel = document.createElement('div'); panel.className = 'hp hp-pila';
+      var stick = document.createElement('div'); stick.className = 'pl-stick';
+      var area = document.createElement('div'); area.className = 'pl-area';
+      hc.parentNode.insertBefore(panel, hc);
+      hc.classList.remove('hp'); var c0 = document.createElement('div'); c0.className = 'pl-card'; c0.appendChild(hc); cards.push(c0);
+      if (hd){
+        $$('.spec > div', hd).forEach(function(d){ var w = document.createElement('div'); w.className = 'pl-card'; var sp = document.createElement('div'); sp.className = 'spec pl-spec'; sp.appendChild(d); w.appendChild(sp); cards.push(w); });
+        var m = $('.measure', hd); if (m){ var w2 = document.createElement('div'); w2.className = 'pl-card'; var box = document.createElement('div'); box.className = 'pl-medir'; box.innerHTML = '<h4>Cómo se mide</h4>'; var mm = m.cloneNode(true); var bb = $('b', mm); if (bb) bb.remove(); mm.className = 'pl-medir-p'; box.appendChild(mm); w2.appendChild(box); cards.push(w2); }
+        hd.remove();
+      }
+      cards.forEach(function(c){ area.appendChild(c); });
+      var dots = document.createElement('div'); dots.className = 'pl-dots'; dots.innerHTML = cards.map(function(c, i){ var t = i === 0 ? 'Paso a paso' : ($('h4', c) ? $('h4', c).textContent : ''); return '<span><i></i>'+t+'</span>'; }).join('');
+      stick.appendChild(area); stick.appendChild(dots); panel.appendChild(stick);
+      pilas.push({panel:panel, stick:stick, area:area, cards:cards, dots:$$('span', dots)});
+    });
+  }
+  var PL_GAP = 26;
+  function medirPilas(){
+    pilas.forEach(function(o){
+      var cw = Math.min(470, innerWidth*.34), n = o.cards.length, h = 0;
+      o.cw = cw;
+      o.cards.forEach(function(c){ c.style.width = cw + 'px'; c._h = c.offsetHeight; h = Math.max(h, c._h); });
+      o.H = h; o.area.style.height = (h + 100) + 'px';
+      o.area.style.width = (n*(cw + PL_GAP)) + 'px';
+      o.panel.style.width = Math.round(n*(cw + PL_GAP) + innerWidth*.08) + 'px';
+    });
+  }
+  function pilaFrame(){
+    pilas.forEach(function(o){
+      var r = o.area.getBoundingClientRect(); if (r.right < -400 || r.left > innerWidth + 400) return;
+      var n = o.cards.length, step = o.cw + PL_GAP;
+      /* la carta de adelante queda en el centro de la pantalla; las leídas se quedan en su lugar, una al lado de la otra */
+      var raw0 = clamp((innerWidth/2 - o.cw/2 - r.left)/step, 0, n-1), k = Math.floor(raw0), fr = raw0 - k;
+      var raw = Math.min(n-1, k + smooth(clamp((fr - .15)/.7, 0, 1)));
+      o.cards.forEach(function(c, j){
+        var d = j - raw, tr, z;
+        var cy = 50 + (o.H - (c._h || o.H))/2;   /* todas centradas en la misma línea */
+        if (d <= 0){ tr = 'translate('+(j*step)+'px,'+cy.toFixed(1)+'px)'; z = 50 + j; c.style.opacity = 1; }
+        else {
+          var dd = Math.min(d, 3), x = raw*step + Math.max(0, 1 - d)*0;
+          tr = 'translate('+x.toFixed(1)+'px,'+(cy - dd*30).toFixed(1)+'px) scale('+(1 - dd*.06).toFixed(3)+')';
+          z = 40 - j; c.style.opacity = d > 2.6 ? 0 : 1;
+        }
+        c.style.transform = tr; c.style.zIndex = z;
+        c.classList.toggle('pl-front', Math.abs(d) < .5);
+        c.classList.toggle('pl-atras', d >= .5);
+      });
+      var kk = Math.round(raw); o.dots.forEach(function(sp, i){ sp.classList.toggle('on', i === kk); sp.classList.toggle('hecho', i < kk); });
+    });
+  }
+
+  /* ---------- glosario: tarjetas que se dan vuelta ---------- */
+  var gl = $('#glosario .gl');
+  if (gl){
+    var grid = document.createElement('div'); grid.className = 'gl-grid';
+    var dts = $$('dt', gl), leidos = 0;
+    dts.forEach(function(dt, i){
+      var dd = dt.nextElementSibling;
+      var c = document.createElement('button'); c.type = 'button'; c.className = 'gl-c rv'; c.style.setProperty('--d', (i*70)+'ms');
+      c.innerHTML = '<span class="gl-in"><span class="gl-f"><small>'+String(i+1).padStart(2,'0')+'</small><b>'+dt.textContent+'</b><em>¿Qué es? ↻</em></span><span class="gl-b"><b>'+dt.textContent+'</b><span>'+dd.textContent+'</span></span></span>';
+      c.addEventListener('click', function(){ var on = c.classList.toggle('on'); if (on && !c._leido){ c._leido = true; leidos++; cnt.textContent = leidos + ' de ' + dts.length + ' leídos'; if (leidos === dts.length){ var r = c.getBoundingClientRect(); explotar(r.left + r.width/2, r.top + r.height/2, ['#FFFFFF','#14213D','#F3D02F','#FFFFFF']); cnt.textContent = '¡Ya sabés todo el glosario!'; } } });
+      grid.appendChild(c);
+    });
+    var cnt = document.createElement('p'); cnt.className = 'gl-cnt'; cnt.textContent = 'Tocá cada término para ver qué significa · 0 de ' + dts.length + ' leídos';
+    gl.parentNode.insertBefore(cnt, gl); gl.parentNode.replaceChild(grid, gl);
+    var ioG = new IntersectionObserver(function(es){ es.forEach(function(e){ if (e.isIntersecting){ e.target.classList.add('in'); ioG.unobserve(e.target); } }); }, {threshold:.2});
+    $$('.gl-c', grid).forEach(function(c){ ioG.observe(c); });
+  }
+
+  /* ---------- pasaporte: las hojas pasan con el scroll de la página (compu) ---------- */
+  var ppSec = $('#pasaporte'), ppFr = $('#pasaporte iframe'), PP_N = 9, ppLast = -1;
+  function ppFrame(){
+    if (!ppSec || !ppFr || !mqDesk.matches || !ppFr.contentWindow) return;
+    var r = ppSec.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) return;
+    var p = clamp(-r.top / Math.max(1, r.height - innerHeight), 0, 1) * PP_N;
+    if (Math.abs(p - ppLast) < .002) return; ppLast = p;
+    ppFr.contentWindow.postMessage({pp: p}, '*');
+  }
+  addEventListener('message', function(e){
+    var d = e.data || {}; if (typeof d.go !== 'number' || !ppSec || !mqDesk.matches) return;
+    var top = ppSec.getBoundingClientRect().top + scrollY, max = ppSec.offsetHeight - innerHeight;
+    scrollTo({top: top + clamp(d.go, 0, PP_N)/PP_N * max + 2, behavior: reduce ? 'auto' : 'smooth'});
+  });
+  if (ppFr) ppFr.addEventListener('load', function(){ ppLast = -1; ppFrame(); });
+
+  medirPilas();
+  addEventListener('resize', medirPilas);
+  var tick = false;
+  function frame(){ tick = false; dealFrame(); pilaFrame(); ppFrame(); }
+  addEventListener('scroll', function(){ if (!tick){ tick = true; requestAnimationFrame(frame); } }, {passive:true});
+  addEventListener('resize', function(){ requestAnimationFrame(frame); });
+  addEventListener('load', function(){ medirPilas(); frame(); });
+  frame();
+})();
+</script>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var vh = function(){return window.innerHeight};
+
+  /* ---------- scroll: progress, horizontal strips, ball, parallax ---------- */
+  var root = document.documentElement;
+  var mqDesk = window.matchMedia('(min-width:901px)');
+  var journey = document.getElementById('journey'), ball = document.getElementById('ball'), ballg = document.getElementById('ballg');
+  var strips = Array.prototype.slice.call(document.querySelectorAll('.hs'));
+  var par = Array.prototype.slice.call(document.querySelectorAll('[data-par]'));
+  var hpar = Array.prototype.slice.call(document.querySelectorAll('[data-hpar]'));
+  var spyLinks = Array.prototype.slice.call(document.querySelectorAll('.side nav a'));
+  var spyEls = spyLinks.map(function(a){return document.getElementById(a.getAttribute('data-sec'))});
+  var ticking = false;
+  function ease(f){ var s = f*f*(3-2*f); return s*s*(3-2*s); }
+
+  function sizeStrips(){
+    strips.forEach(function(h){
+      var track = h.querySelector('.hs-track');
+      if(mqDesk.matches){
+        var pinW = h.querySelector('.hs-pin').clientWidth;
+        h.style.height = (track.scrollWidth - pinW + window.innerHeight) + 'px';
+      } else { h.style.height = ''; track.style.transform = ''; }
+    });
+  }
+  function moveStrips(){
+    if(!mqDesk.matches) return;
+    strips.forEach(function(h){
+      var track = h.querySelector('.hs-track');
+      var top = h.getBoundingClientRect().top;
+      var max = h.offsetHeight - window.innerHeight;
+      var sx = Math.max(0, Math.min(max, -top));
+      track.style.transform = 'translate3d(' + (-sx).toFixed(1) + 'px,0,0)';
+    });
+  }
+  /* ---------- confetti ---------- */
+  var cvc = document.getElementById('confetti'), cctx = cvc ? cvc.getContext('2d') : null, bits = [], cRun = false;
+  function csize(){ if(!cvc) return; var d = Math.min(2, window.devicePixelRatio||1); cvc.width = innerWidth*d; cvc.height = innerHeight*d; cctx.setTransform(d,0,0,d,0,0); }
+  function burst(x,y){
+    if(!cvc || reduce) return;
+    csize();
+    var cols = ['#8E0C14','#FFFFFF','#1F2F86','#FFFFFF','#F3EBDD','#1F2F86','#FFFFFF'];
+    for(var i=0;i<170;i++){
+      var a = -Math.PI/2 + (Math.random()-.5)*2.4, v = 6 + Math.random()*11;
+      bits.push({x:x,y:y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,w:6+Math.random()*8,h:3+Math.random()*5,r:Math.random()*6.28,vr:(Math.random()-.5)*.4,c:cols[i%cols.length],l:0,max:130+Math.random()*80,sw:Math.random()*6.28});
+    }
+    if(!cRun){ cRun = true; requestAnimationFrame(cloop); }
+  }
+  function cloop(){
+    cctx.clearRect(0,0,innerWidth,innerHeight);
+    for(var i=bits.length-1;i>=0;i--){
+      var b = bits[i]; b.l++; b.vy += .28; b.vx *= .985; b.vy *= .985; b.x += b.vx + Math.sin(b.sw + b.l*.08)*.8; b.y += b.vy; b.r += b.vr;
+      if(b.l > b.max || b.y > innerHeight+40){ bits.splice(i,1); continue; }
+      cctx.save(); cctx.globalAlpha = Math.min(1, (b.max-b.l)/30); cctx.translate(b.x,b.y); cctx.rotate(b.r);
+      cctx.scale(1, Math.cos(b.l*.15+b.sw));
+      cctx.fillStyle = b.c; cctx.fillRect(-b.w/2,-b.h/2,b.w,b.h);
+      if(b.c === '#FFFFFF'){ cctx.strokeStyle = 'rgba(0,0,0,.18)'; cctx.strokeRect(-b.w/2,-b.h/2,b.w,b.h); }
+      cctx.restore();
+    }
+    if(bits.length) requestAnimationFrame(cloop); else { cRun = false; cctx.clearRect(0,0,innerWidth,innerHeight); }
+  }
+  function moveBall(){
+    if(!journey || !ball) return;
+    var ns = Array.prototype.slice.call(journey.querySelectorAll('.n'));
+    if(!ns.length) return;
+    var jr = journey.getBoundingClientRect();
+    var horiz = mqDesk.matches;
+    var c = ns.map(function(n){ var r = n.getBoundingClientRect(); return {x:r.left+r.width/2-jr.left, y:r.top+r.height/2-jr.top}; });
+    var hsEl = journey.closest('.hs');
+    var sp = 0;
+    if(horiz && hsEl){ var mx = hsEl.offsetHeight - window.innerHeight; sp = mx > 0 ? Math.max(0, Math.min(1, -hsEl.getBoundingClientRect().top / mx)) : 0; }
+    var line = horiz ? (68 + (window.innerWidth-68)*(0.25 + 0.6*sp)) - jr.left : (window.innerHeight*0.55) - jr.top;
+    var a = horiz ? 'x' : 'y';
+    var t = 0, i;
+    if(line <= c[0][a]) t = 0;
+    else if(line >= c[c.length-1][a]) t = c.length-1;
+    else { for(i=0;i<c.length-1;i++){ if(line < c[i+1][a]){ t = i + (line-c[i][a])/(c[i+1][a]-c[i][a]); break; } } }
+    var k = Math.min(c.length-2, Math.floor(t)), f = t - k;
+    if(t >= c.length-1){ k = c.length-2; f = 1; }
+    var e = ease(f);
+    var x = c[k].x + (c[k+1].x - c[k].x)*e;
+    var y = c[k].y + (c[k+1].y - c[k].y)*e;
+    var hop = Math.sin(Math.PI*f) * (horiz ? 46 : 20);
+    if(horiz) y -= hop; else x -= hop;
+    var land = Math.min(f, 1-f);
+    var sq = land < .08 ? (1 - land/.08) : 0;
+    ball.style.left = x.toFixed(1) + 'px';
+    ball.style.top = y.toFixed(1) + 'px';
+    ball.style.transform = 'scale(' + (1 + sq*.25).toFixed(3) + ',' + (1 - sq*.25).toFixed(3) + ')';
+    ballg.style.transformOrigin = '20px 20px';
+    ballg.style.transform = 'rotate(' + (t*420).toFixed(0) + 'deg)';
+    var near = Math.round(t);
+    ns.forEach(function(n,j){ n.classList.toggle('hit', j===near && Math.abs(t-near) < .06); });
+    var sc = t > c.length-1.02;
+    if(sc && !journey.classList.contains('scored')){ var gr = ns[ns.length-1].getBoundingClientRect(); burst(gr.left+gr.width/2, gr.top+gr.height/2); }
+    journey.classList.toggle('scored', sc);
+  }
+  function spy(){
+    var cur = 0, mid = window.innerHeight*0.4;
+    spyEls.forEach(function(el,i){ if(el && el.getBoundingClientRect().top < mid) cur = i; });
+    spyLinks.forEach(function(a,i){ a.classList.toggle('on', i===cur); });
+  }
+  function frame(){
+    ticking = false;
+    var h = root.scrollHeight - window.innerHeight;
+    root.style.setProperty('--p', h>0 ? (window.scrollY/h).toFixed(4) : 0);
+    moveStrips();
+    moveBall();
+    spy();
+    if(reduce) return;
+    var vw = window.innerWidth;
+    par.forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if(r.bottom < -300 || r.top > window.innerHeight+300) return;
+      var d = (r.top + r.height/2 - (el._ty||0)) - window.innerHeight/2;
+      var s = parseFloat(el.getAttribute('data-par'));
+      el._ty = -d*s;
+      el.style.transform = 'translate3d(0,' + el._ty.toFixed(1) + 'px,0)' + (el.tagName === 'IMG' ? ' scale(1.12)' : '');
+    });
+    if(mqDesk.matches){
+      hpar.forEach(function(el){
+        var r = el.getBoundingClientRect();
+        if(r.right < -300 || r.left > vw+300) return;
+        var d = (r.left + r.width/2 - (el._tx||0)) - (68 + (vw-68)/2);
+        var s = parseFloat(el.getAttribute('data-hpar'));
+        el._tx = -d*s;
+        el.style.transform = 'translate3d(' + el._tx.toFixed(1) + 'px,0,0)' + (el.tagName === 'IMG' ? ' scale(1.1)' : '');
+      });
+    }
+  }
+  function req(){ if(!ticking){ticking=true;requestAnimationFrame(frame);} }
+  function relayout(){ sizeStrips(); req(); }
+  window.addEventListener('scroll', req, {passive:true});
+  window.addEventListener('resize', relayout);
+  window.addEventListener('load', relayout);
+  if(mqDesk.addEventListener) mqDesk.addEventListener('change', relayout);
+  sizeStrips(); frame();
+  setTimeout(relayout, 400);
+
+  strips.forEach(function(h){
+    var pin = h.querySelector('.hs-pin'), down = false, sx = 0, sy = 0;
+    pin.addEventListener('pointerdown', function(e){
+      if(e.pointerType !== 'mouse' || !mqDesk.matches || e.target.closest('a,button,input,label,select,textarea')) return;
+      down = true; sx = e.clientX; sy = window.scrollY; pin.classList.add('drag');
+    });
+    window.addEventListener('pointermove', function(e){ if(down){ window.scrollTo(0, sy - (e.clientX - sx)); } });
+    window.addEventListener('pointerup', function(){ down = false; pin.classList.remove('drag'); });
+    var hint = pin.querySelector('.drag-hint');
+    window.addEventListener('scroll', function(){ if(hint) hint.style.opacity = h.getBoundingClientRect().top < -40 ? 0 : 1; }, {passive:true});
+  });
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href').slice(1), el = id && document.getElementById(id);
+      if(!el) return;
+      e.preventDefault();
+      window.scrollTo({top: el.getBoundingClientRect().top + window.scrollY, behavior: reduce ? 'auto' : 'smooth'});
+    });
+  });
+
+  /* hero tilt */
+  var hf = document.getElementById('heroFrame'), hp = document.getElementById('heroPhoto');
+  if(hf && !reduce){
+    hp.addEventListener('pointermove', function(e){
+      var r = hp.getBoundingClientRect();
+      var x = (e.clientX - r.left)/r.width - .5, y = (e.clientY - r.top)/r.height - .5;
+      hf.style.transform = 'rotate(3deg) rotateY(' + (x*10).toFixed(1) + 'deg) rotateX(' + (-y*10).toFixed(1) + 'deg)';
+    });
+    hp.addEventListener('pointerleave', function(){ hf.style.transform = ''; });
+  }
+
+  /* hero canvas: flow field + ripples (p5-style) */
+  var cv = document.getElementById('heroCv');
+  if(cv){
+    var ctx = cv.getContext('2d'), W=0, H=0, dpr = Math.min(2, window.devicePixelRatio||1);
+    var hero = document.getElementById('inicio');
+    var mouse = {x:-999,y:-999}, ripples = [], P = [], t = 0, running = false, N = 110, TR = 16;
+    function size(){ var r = hero.getBoundingClientRect(); W = r.width; H = r.height; cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0); }
+    function spawn(p){ p.x = Math.random()*W; p.y = Math.random()*H; p.h = []; p.s = .8 + Math.random()*1.6; return p; }
+    function init(){ size(); P = []; for(var i=0;i<N;i++) P.push(spawn({})); }
+    function field(x,y){ return Math.sin(x*.0032 + t*.35)*Math.cos(y*.0036 - t*.25)*6.283 + Math.sin((x+y)*.0018 + t*.2)*2; }
+    function draw(){
+      ctx.clearRect(0,0,W,H);
+      ctx.lineCap = 'round';
+      for(var i=0;i<P.length;i++){
+        var p = P[i], a = field(p.x,p.y);
+        var dx = p.x - mouse.x, dy = p.y - mouse.y, d = Math.sqrt(dx*dx+dy*dy);
+        var vx = Math.cos(a)*p.s, vy = Math.sin(a)*p.s;
+        if(d < 160){ var f = (160-d)/160*3.2; vx += dx/d*f; vy += dy/d*f; }
+        p.x += vx; p.y += vy; p.h.push(p.x, p.y); if(p.h.length > TR*2) p.h.splice(0,2);
+        if(p.x<-20||p.x>W+20||p.y<-20||p.y>H+20){ spawn(p); }
+        for(var k=2;k<p.h.length;k+=2){
+          ctx.strokeStyle = 'rgba(255,255,255,' + (k/(TR*2)*.55).toFixed(3) + ')';
+          ctx.lineWidth = 1 + k/(TR*2)*2.2;
+          ctx.beginPath(); ctx.moveTo(p.h[k-2],p.h[k-1]); ctx.lineTo(p.h[k],p.h[k+1]); ctx.stroke();
+        }
+      }
+      for(var j=ripples.length-1;j>=0;j--){
+        var rp = ripples[j]; rp.r += 5; rp.a -= .012;
+        if(rp.a <= 0){ ripples.splice(j,1); continue; }
+        for(var q=0;q<3;q++){ ctx.strokeStyle = 'rgba(255,255,255,' + (rp.a*(1-q*.28)).toFixed(3) + ')'; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(rp.x,rp.y,Math.max(0,rp.r-q*22),0,6.283); ctx.stroke(); }
+      }
+    }
+    function loop(){ if(!running) return; t += .012; draw(); requestAnimationFrame(loop); }
+    init();
+    if(reduce){ for(var z=0;z<40;z++){ t += .05; for(var i2=0;i2<P.length;i2++){ var pp = P[i2], aa = field(pp.x,pp.y); pp.x += Math.cos(aa)*6; pp.y += Math.sin(aa)*6; pp.h.push(pp.x,pp.y); if(pp.h.length>TR*2) pp.h.splice(0,2); } } draw(); }
+    else{
+      new IntersectionObserver(function(es){ var on = es[0].isIntersecting; if(on && !running){ running = true; loop(); } else if(!on){ running = false; } }).observe(hero);
+      hero.addEventListener('pointermove', function(e){ var r = hero.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top; });
+      hero.addEventListener('pointerleave', function(){ mouse.x = mouse.y = -999; });
+      hero.addEventListener('pointerdown', function(e){ var r = hero.getBoundingClientRect(); ripples.push({x:e.clientX-r.left,y:e.clientY-r.top,r:6,a:.7}); });
+      window.addEventListener('resize', init);
+    }
+  }
+})();
+</script>
+</body>
+</html>
